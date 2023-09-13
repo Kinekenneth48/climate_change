@@ -17,8 +17,7 @@ options(timeout = max(300, getOption("timeout"))) #increase timeout to 5mins
 #download daily data
 tictoc::tic()
 download_spear_day(
-  #directory = "C:/Users/KENNETH/OneDrive - USU/RESEARCH CODE/project/climate_change/data-raw",
-  directory = "C:/Users/Ken/OneDrive - USU/RESEARCH CODE/project/climate_change/data-raw",
+  directory = "C:/Users/KENNETH/OneDrive - USU/RESEARCH CODE/project/climate_change/data-raw",
   var = "tas", 
   scenario = c("historical", "future")
 )
@@ -32,6 +31,7 @@ download_spear_month(
   scenario = c("historical", "future")
 )
 tictoc::toc()
+
 
 # ============================================================================#
 # load spear data 
@@ -71,13 +71,3 @@ cropped_raster <- crop(spear_month_hist[[1]], usa_extent)
 
 # Plot the cropped raster
 plot(cropped_raster)
-
-https://noaa-gfdl-spear-large-ensembles-pds.s3.amazonaws.com/SPEAR/GFDL-LARGE-ENSEMBLES/CMIP/NOAA-GFDL/GFDL-SPEAR-MED/scenarioSSP5-85/r6i1p1f1/day/tas/gr3/v20210201/tas_day_GFDL-SPEAR-MED_future_r6i1p1f1_gr3_20150101-20201231.n
-https://noaa-gfdl-spear-large-ensembles-pds.s3.amazonaws.com/SPEAR/GFDL-LARGE-ENSEMBLES/CMIP/NOAA-GFDL/GFDL-SPEAR-MED/scenarioSSP5-85/r4i1p1f1/day/tas/gr3/v20210201/
-
-
-
-
-
-
-

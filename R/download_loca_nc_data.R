@@ -4,8 +4,8 @@ download_loca_nc_data <- function(nc_files_urls, variable_name = "pr",
                                   download_dir = ".",
                                   model_names = NULL) {
   
-  #increase timeout to 10mins
-  options(timeout = max(600, getOption("timeout"))) 
+  #increase timeout 
+  options(timeout = max(60000, getOption("timeout"))) 
   
   # Validate the variable name
   valid_variable_names <- c("pr", "tasmax", "tasmin")

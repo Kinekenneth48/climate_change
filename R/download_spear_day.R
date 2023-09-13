@@ -40,8 +40,14 @@ download_spear_day <- function(directory = ".", var = "tas",
   
   # Download function
   download_files <- function(base, periods, phase) {
-    scenario_dir <- paste0(download_dir, "/", var, "/", phase, "/day")
-    dir.create(scenario_dir, showWarnings = FALSE, recursive = TRUE)
+    if (phase == "scenarioSSP5-85") {
+      scenario_dir <- paste0(download_dir, "/", var, "/future/day")
+      dir.create(scenario_dir, showWarnings = FALSE, recursive = TRUE)
+    } else {
+      scenario_dir <- paste0(download_dir, "/", var, "/", phase, "/day")
+      dir.create(scenario_dir, showWarnings = FALSE, recursive = TRUE)
+    }
+
     
     for (r in 1:30) {
       for (period in periods) {
@@ -62,7 +68,11 @@ download_spear_day <- function(directory = ".", var = "tas",
   
   # Loop over specified scenarios
   for (s in scenario) {
-    download_files(base_url[[s]], time_periods[[s]], s)
+    if (s == "future") {
+      download_files(base_url[["future"]], time_periods[[s]], "scenarioSSP5-85")
+    } else {
+      download_files(base_url[[s]], time_periods[[s]], s)
+    }
   }
   
   message("All daily files are downloaded.")
