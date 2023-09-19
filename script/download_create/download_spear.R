@@ -17,7 +17,8 @@ options(timeout = max(300, getOption("timeout"))) #increase timeout to 5mins
 #download daily data
 tictoc::tic()
 download_spear_day(
-  directory = "C:/Users/KENNETH/OneDrive - USU/RESEARCH CODE/project/climate_change/data-raw",
+  #directory = "C:/Users/KENNETH/OneDrive - USU/RESEARCH CODE/project/climate_change/data-raw",
+  directory = "C:/Users/Ken/OneDrive - USU/RESEARCH CODE/project/climate_change/data-raw",
   var = "tas", 
   scenario = c("historical", "future")
 )
@@ -31,7 +32,6 @@ download_spear_month(
   scenario = c("historical", "future")
 )
 tictoc::toc()
-
 
 # ============================================================================#
 # load spear data 
@@ -71,3 +71,9 @@ cropped_raster <- crop(spear_month_hist[[1]], usa_extent)
 
 # Plot the cropped raster
 plot(cropped_raster)
+
+
+
+
+
+

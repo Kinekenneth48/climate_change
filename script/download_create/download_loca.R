@@ -19,16 +19,22 @@ options(timeout = max(600, getOption("timeout"))) # increase timeout to 10mins
 # ============================================================================#
 # fetch all nc file urls in LOCA directory
 # ============================================================================#
-# 13 mins -- 3.8MB
+# 13 mins -- 1.7MB - 6,168 elements
 tictoc::tic()
-urls_nc_files_found <- fetch_loca_nc_file_urls()
+urls_nc_files_found_6km <- fetch_loca_nc_file_urls(resolution = "6km")
 tictoc::toc()
 
-save(urls_nc_files_found, file = "data-raw/RObjects/urls_nc_files_found.RData")
+save(urls_nc_files_found_6km, file = "data-raw/RObjects/urls_nc_files_found_6km.RData")
+
+# 13 mins -- 3.8MB - 13,794 elements
+tictoc::tic()
+urls_nc_files_found_all <- fetch_loca_nc_file_urls(resolution = "all")
+tictoc::toc()
+
+save(urls_nc_files_found_all, file = "data-raw/RObjects/urls_nc_files_found_all.RData")
 
 
-
-
+load("data-raw/RObjects/urls_nc_files_found_6km.RData")
 
 
 ###############################################################################
@@ -43,17 +49,17 @@ save(urls_nc_files_found, file = "data-raw/RObjects/urls_nc_files_found.RData")
 tictoc::tic()
 # download hist data
 download_loca_nc_data(
-  nc_files_urls = urls_nc_files_found, historical = TRUE,
-  monthly = TRUE, variable_name = "pr",
-  download_dir = "C:/Users/KENNETH/OneDrive - USU/RESEARCH CODE/project/climate_change/data-raw",
+  nc_files_urls = urls_nc_files_found_6km, historical = TRUE,
+  monthly = TRUE, variable_name = "tasmin",
+  download_dir = "C:/Users/Ken/OneDrive - USU/RESEARCH CODE/project/climate_change/data-raw",
   model_names = "ACCESS-CM2"
 )
 
 # download future data
 download_loca_nc_data(
-  nc_files_urls = urls_nc_files_found, historical = FALSE,
-  monthly = TRUE, variable_name = "pr",
-  download_dir = "C:/Users/KENNETH/OneDrive - USU/RESEARCH CODE/project/climate_change/data-raw",
+  nc_files_urls = urls_nc_files_found_6km, historical = FALSE,
+  monthly = TRUE, variable_name = "tasmin",
+  download_dir = "C:/Users/Ken/OneDrive - USU/RESEARCH CODE/project/climate_change/data-raw",
   model_names = "ACCESS-CM2"
 )
 tictoc::toc()
@@ -65,7 +71,7 @@ tictoc::toc()
 tictoc::tic()
 # download hist data
 download_loca_nc_data(
-  nc_files_urls = urls_nc_files_found, historical = TRUE,
+  nc_files_urls = urls_nc_files_found_all, historical = TRUE,
   monthly = FALSE, variable_name = "pr",
   download_dir = "C:/Users/KENNETH/OneDrive - USU/RESEARCH CODE/project/climate_change/data-raw",
   model_names = "ACCESS-CM2"
@@ -73,7 +79,7 @@ download_loca_nc_data(
 
 # download future data
 download_loca_nc_data(
-  nc_files_urls = urls_nc_files_found, historical = FALSE, 
+  nc_files_urls = urls_nc_files_found_all, historical = FALSE, 
   monthly = FALSE, variable_name = "pr",
   download_dir = "C:/Users/KENNETH/OneDrive - USU/RESEARCH CODE/project/climate_change/data-raw",
   model_names = "ACCESS-CM2"
