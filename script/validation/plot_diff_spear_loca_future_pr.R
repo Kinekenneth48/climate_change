@@ -119,11 +119,10 @@ loca_future_pr_resampled <- terra::resample(loca_future_pr_crop,
 # ============================================================================#
 #  Take percentage difference of each corresponding raster layer
 # ============================================================================#
-# Calculate the percentage difference
+# Calculate the percentage difference and convert to mm per day from kg m2 s
 multiple_per_diff_future_pr_2044_2100 <-
-  ((spear_future_pr_filtered_2044_2100 -
-    loca_future_pr_resampled) /
-    (spear_future_pr_filtered_2044_2100)) * 100
+  (spear_future_pr_filtered_2044_2100 -
+    loca_future_pr_resampled) * 86400
 
 single_per_diff_future_pr_2044_2100 <- terra::app(
   multiple_per_diff_future_pr_2044_2100,
@@ -156,7 +155,7 @@ usa_boundary_reproj$geom <- sf::st_shift_longitude(usa_boundary_reproj$geom)
 # ============================================================================#
 
 # Create a sequence of breaks from -3 to 3, with 10 equally spaced breaks
-my_breaks <- seq(-100, 75, length.out = 15)
+my_breaks <- seq(-2, 2, by = 0.5)
 legend_labels <- sprintf(
   "%.1f to %.1f", my_breaks[-length(my_breaks)],
   my_breaks[-1]
@@ -167,11 +166,10 @@ legend_labels <- sprintf(
 # Plot raster
 plot(crop(single_per_diff_future_pr_2044_2100, usa_extent),
   col = colorRampPalette(brewer.pal(9, "RdYlBu"))(length(my_breaks) - 1),
-  breaks = my_breaks, main = "Mean Percentage Difference of Average Precipitation between future SPEAR and LOCA",
+  breaks = my_breaks, main = "Mean Difference of  Monthly Precipitation between future SPEAR and LOCA (mm per day)",
   plg = list(legend = legend_labels)
 )
 plot(st_geometry(usa_boundary_reproj), add = TRUE)
-
 
 
 
@@ -227,9 +225,8 @@ loca_future_pr_resampled <- terra::resample(loca_future_pr_crop,
 # ============================================================================#
 # Calculate the percentage difference
 multiple_per_diff_future_pr_2044 <-
-  ((spear_future_pr_filtered_2044 -
-      loca_future_pr_resampled) /
-     (spear_future_pr_filtered_2044)) * 100
+  (spear_future_pr_filtered_2044 -
+      loca_future_pr_resampled) * 86400
 
 single_per_diff_future_pr_2044 <- terra::app(
   multiple_per_diff_future_pr_2044,
@@ -262,7 +259,7 @@ usa_boundary_reproj$geom <- sf::st_shift_longitude(usa_boundary_reproj$geom)
 # ============================================================================#
 
 # Create a sequence of breaks from -3 to 3, with 10 equally spaced breaks
-my_breaks <- seq(-100, 75, length.out = 15)
+my_breaks <- seq(-2, 2, by = 0.5)
 legend_labels <- sprintf(
   "%.1f to %.1f", my_breaks[-length(my_breaks)],
   my_breaks[-1]
@@ -273,7 +270,7 @@ legend_labels <- sprintf(
 # Plot raster
 plot(crop(single_per_diff_future_pr_2044, usa_extent),
      col = colorRampPalette(brewer.pal(9, "RdYlBu"))(length(my_breaks) - 1),
-     breaks = my_breaks, main = "Mean Percentage Difference of Average Precipitation between future SPEAR and LOCA (2014-2044)",
+     breaks = my_breaks, main = "Mean Difference of Monthly Precipitation between future SPEAR and LOCA (2014-2044)- mm per day",
      plg = list(legend = legend_labels)
 )
 plot(st_geometry(usa_boundary_reproj), add = TRUE)
@@ -333,9 +330,8 @@ loca_future_pr_resampled <- terra::resample(loca_future_pr_crop,
 # ============================================================================#
 # Calculate the percentage difference
 multiple_per_diff_future_pr_2074 <-
-  ((spear_future_pr_filtered_2074 -
-      loca_future_pr_resampled) /
-     (spear_future_pr_filtered_2074)) * 100
+  (spear_future_pr_filtered_2074 -
+      loca_future_pr_resampled)  * 86400
 
 single_per_diff_future_pr_2074 <- terra::app(
   multiple_per_diff_future_pr_2074,
@@ -368,7 +364,7 @@ usa_boundary_reproj$geom <- sf::st_shift_longitude(usa_boundary_reproj$geom)
 # ============================================================================#
 
 # Create a sequence of breaks from -3 to 3, with 10 equally spaced breaks
-my_breaks <- seq(-100, 75, length.out = 15)
+my_breaks <- seq(-2, 2, by =0.5)
 legend_labels <- sprintf(
   "%.1f to %.1f", my_breaks[-length(my_breaks)],
   my_breaks[-1]
@@ -379,7 +375,7 @@ legend_labels <- sprintf(
 # Plot raster
 plot(crop(single_per_diff_future_pr_2074, usa_extent),
      col = colorRampPalette(brewer.pal(9, "RdYlBu"))(length(my_breaks) - 1),
-     breaks = my_breaks, main = "Mean Percentage Difference of Average Precipitation between future SPEAR and LOCA (2045-2074)",
+     breaks = my_breaks, main = "Mean Difference of Monthly Precipitation between future SPEAR and LOCA (2045-2074) - mm per day",
      plg = list(legend = legend_labels)
 )
 plot(st_geometry(usa_boundary_reproj), add = TRUE)
@@ -439,9 +435,8 @@ loca_future_pr_resampled <- terra::resample(loca_future_pr_crop,
 # ============================================================================#
 # Calculate the percentage difference
 multiple_per_diff_future_pr_2100 <-
-  ((spear_future_pr_filtered_2100 -
-      loca_future_pr_resampled) /
-     (spear_future_pr_filtered_2100)) * 100
+  (spear_future_pr_filtered_2100 -
+      loca_future_pr_resampled)  * 86400
 
 single_per_diff_future_pr_2100 <- terra::app(
   multiple_per_diff_future_pr_2100,
@@ -474,7 +469,7 @@ usa_boundary_reproj$geom <- sf::st_shift_longitude(usa_boundary_reproj$geom)
 # ============================================================================#
 
 # Create a sequence of breaks from -3 to 3, with 10 equally spaced breaks
-my_breaks <- seq(-100, 75, length.out = 15)
+my_breaks <- seq(-2, 2, by = 0.5)
 legend_labels <- sprintf(
   "%.1f to %.1f", my_breaks[-length(my_breaks)],
   my_breaks[-1]
@@ -485,7 +480,7 @@ legend_labels <- sprintf(
 # Plot raster
 plot(crop(single_per_diff_future_pr_2100, usa_extent),
      col = colorRampPalette(brewer.pal(9, "RdYlBu"))(length(my_breaks) - 1),
-     breaks = my_breaks, main = "Mean Difference of Average Precipitation between future SPEAR and LOCA (2075-2100)",
+     breaks = my_breaks, main = "Mean Difference of Monthly Precipitation between future SPEAR and LOCA (2075-2100) - mm per day",
      plg = list(legend = legend_labels)
 )
 plot(st_geometry(usa_boundary_reproj), add = TRUE)

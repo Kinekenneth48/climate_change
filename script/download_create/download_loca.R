@@ -85,3 +85,8 @@ download_loca_nc_data(
   model_names = "ACCESS-CM2"
 )
 tictoc::toc()
+
+
+r =terra::rast("data-raw/loca/ACCESS-CM2/pr/historical/month/pr.ACCESS-CM2.historical.r1i1p1f1.1950-2014.LOCA_16thdeg_v20220519.monthly.nc")
+
+t = terra::rast("data-raw\\spear\\pr\\historical\\month\\pr_Amon_GFDL-SPEAR-MED_historical_r3i1p1f1_gr3_192101-201412.nc")
