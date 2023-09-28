@@ -1,4 +1,4 @@
-library(prism) 
+library(prism)
 
 # ============================================================================#
 # Download tmean from prism
@@ -27,9 +27,9 @@ for (year in years) {
   for (month in months) {
     # Construct the folder name based on the given pattern
     folder_name <- sprintf("PRISM_tmean_stable_4kmM3_%d%02d_bil", year, month)
-    
+
     full_path <- file.path(base_dir, folder_name)
-    
+
     # Check if the folder exists
     if (!dir.exists(full_path)) {
       missing_folders <- append(missing_folders, full_path)
@@ -77,9 +77,9 @@ for (year in years) {
   for (month in months) {
     # Construct the folder name based on the given pattern
     folder_name <- sprintf("PRISM_ppt_stable_4kmM2_%d%02d_bil", year, month)
-    
+
     full_path <- file.path(base_dir, folder_name)
-    
+
     # Check if the folder exists
     if (!dir.exists(full_path)) {
       missing_folders <- append(missing_folders, full_path)
@@ -107,9 +107,9 @@ for (year in years) {
   for (month in months) {
     # Construct the folder name based on the given pattern
     folder_name <- sprintf("PRISM_ppt_stable_4kmM3_%d%02d_bil", year, month)
-    
+
     full_path <- file.path(base_dir, folder_name)
-    
+
     # Check if the folder exists
     if (!dir.exists(full_path)) {
       missing_folders <- append(missing_folders, full_path)
@@ -124,4 +124,3 @@ if (length(missing_folders) > 0) {
 } else {
   cat("All expected folders are present.")
 }
-
