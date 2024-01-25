@@ -6,7 +6,7 @@ norm_data = rnorm(n=100, mean=4, sd=2)
 log_norm_data = exp(norm_data)
 
 fit_normal(norm_data)
-fit_log_normal(log_norm_data)
+fit =fit_log_normal(log_norm_data)
 fit_gev(log_norm_data)
 
 # ============================================================================#
