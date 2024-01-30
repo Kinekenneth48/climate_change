@@ -35,7 +35,7 @@ save(urls_nc_files_found_all, file = "data-raw/RObjects/urls_nc_files_found_all.
 
 
 load("data-raw/RObjects/urls_nc_files_found_6km.RData")
-
+load("data-raw/RObjects/urls_nc_files_found_6km.RData")
 
 ###############################################################################
 ### STEP 1: DOWNLOAD NC FILES
@@ -79,14 +79,25 @@ download_loca_nc_data(
 
 # download future data
 download_loca_nc_data(
-  nc_files_urls = urls_nc_files_found_all, historical = FALSE, 
+  nc_files_urls = urls_nc_files_found_6km, historical = FALSE, 
   monthly = FALSE, variable_name = "pr",
-  download_dir = "C:/Users/KENNETH/OneDrive - USU/RESEARCH CODE/project/climate_change/data-raw",
+  download_dir = "D:/data-raw",
   model_names = "ACCESS-CM2"
 )
 tictoc::toc()
 
+# download future data
+download_loca_nc_data(
+  nc_files_urls = urls_nc_files_found_6km, historical = FALSE, 
+  monthly = FALSE, variable_name = "tasmax",
+  download_dir = "D:/data-raw",
+  model_names = "ACCESS-CM2"
+)
 
-r =terra::rast("data-raw/loca/ACCESS-CM2/pr/historical/month/pr.ACCESS-CM2.historical.r1i1p1f1.1950-2014.LOCA_16thdeg_v20220519.monthly.nc")
-
-t = terra::rast("data-raw\\spear\\pr\\historical\\month\\pr_Amon_GFDL-SPEAR-MED_historical_r3i1p1f1_gr3_192101-201412.nc")
+# download future data
+download_loca_nc_data(
+  nc_files_urls = urls_nc_files_found_6km, historical = FALSE, 
+  monthly = FALSE, variable_name = "tasmin",
+  download_dir = "D:/data-raw",
+  model_names = "ACCESS-CM2"
+)

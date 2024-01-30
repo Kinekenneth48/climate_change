@@ -16,7 +16,7 @@ shapefile <- vect("data-raw/bear_lake_shape_file/id_ut8_1601.shp")
 # ============================================================================#
 
 # Define the path
-path <- "E:/data-raw/loca/ACCESS-CM2/pr/historical/day"
+path <- "D:/data-raw/loca/ACCESS-CM2/pr/historical/day"
 
 # Find all netCDF files that match the pattern
 file_list <- list.files(
@@ -42,7 +42,7 @@ for (file in file_list) {
   raster <- terra::rast(file)
 
   # Crop the raster
-  cropped <- crop(x = raster, y = shapefile_reprojected, mask = TRUE)
+  cropped <- crop(x = raster, y = shapefile_reprojected, mask = FALSE)
 
   # Create a new file name
   # Modify the file name and change extension to .tif
@@ -54,7 +54,7 @@ for (file in file_list) {
   # Save the cropped file
   terra::writeRaster(cropped, new_file,overwrite = TRUE)
 }
-tictoc::toc()
+
 
 
 
@@ -68,7 +68,7 @@ tictoc::toc()
 # ============================================================================#
 
 # Define the path
-path <- "E:/data-raw/loca/ACCESS-CM2/pr/future/day"
+path <- "D:/data-raw/loca/ACCESS-CM2/pr/future/day"
 
 # Find all netCDF files that match the pattern
 file_list <- list.files(
@@ -94,7 +94,7 @@ for (file in file_list) {
   raster <- terra::rast(file)
   
   # Crop the raster
-  cropped <- crop(x = raster, y = shapefile_reprojected, mask = TRUE)
+  cropped <- crop(x = raster, y = shapefile_reprojected, mask = FALSE)
   
   # Create a new file name
   # Modify the file name and change extension to .tif
@@ -118,7 +118,7 @@ tictoc::toc()
 # ============================================================================#
 
 # Define the path
-path <- "E:/data-raw/loca/ACCESS-CM2/tasmax/historical/day"
+path <- "D:/data-raw/loca/ACCESS-CM2/tasmax/historical/day"
 
 # Find all netCDF files that match the pattern
 file_list <- list.files(
@@ -144,7 +144,7 @@ for (file in file_list) {
   raster <- terra::rast(file)
   
   # Crop the raster
-  cropped <- crop(x = raster, y = shapefile_reprojected, mask = TRUE)
+  cropped <- crop(x = raster, y = shapefile_reprojected, mask = FALSE)
   
   # Create a new file name
   # Modify the file name and change extension to .tif
@@ -170,7 +170,7 @@ tictoc::toc()
 # ============================================================================#
 
 # Define the path
-path <- "E:/data-raw/loca/ACCESS-CM2/tasmax/future/day"
+path <- "D:/data-raw/loca/ACCESS-CM2/tasmax/future/day"
 
 # Find all netCDF files that match the pattern
 file_list <- list.files(
@@ -196,7 +196,7 @@ for (file in file_list) {
   raster <- terra::rast(file)
   
   # Crop the raster
-  cropped <- crop(x = raster, y = shapefile_reprojected, mask = TRUE)
+  cropped <- crop(x = raster, y = shapefile_reprojected, mask = FALSE)
   
   # Create a new file name
   # Modify the file name and change extension to .tif
@@ -222,7 +222,7 @@ tictoc::toc()
 # ============================================================================#
 
 # Define the path
-path <- "E:/data-raw/loca/ACCESS-CM2/tasmin/historical/day"
+path <- "D:/data-raw/loca/ACCESS-CM2/tasmin/historical/day"
 
 # Find all netCDF files that match the pattern
 file_list <- list.files(
@@ -248,7 +248,7 @@ for (file in file_list) {
   raster <- terra::rast(file)
   
   # Crop the raster
-  cropped <- crop(x = raster, y = shapefile_reprojected, mask = TRUE)
+  cropped <- crop(x = raster, y = shapefile_reprojected, mask = FALSE)
   
   # Create a new file name
   # Modify the file name and change extension to .tif
@@ -274,7 +274,7 @@ tictoc::toc()
 # ============================================================================#
 
 # Define the path
-path <- "E:/data-raw/loca/ACCESS-CM2/tasmin/future/day"
+path <- "D:/data-raw/loca/ACCESS-CM2/tasmin/future/day"
 
 # Find all netCDF files that match the pattern
 file_list <- list.files(
@@ -300,7 +300,7 @@ for (file in file_list) {
   raster <- terra::rast(file)
   
   # Crop the raster
-  cropped <- crop(x = raster, y = shapefile_reprojected, mask = TRUE)
+  cropped <- crop(x = raster, y = shapefile_reprojected, mask = FALSE)
   
   # Create a new file name
   # Modify the file name and change extension to .tif

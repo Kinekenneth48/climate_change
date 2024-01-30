@@ -43,7 +43,7 @@ for (j in 1:length(file_list)) {
   }
 
   # crop raster
-  crop_raster <- crop(x = ua_raster, y = shapefile, mask = TRUE)
+  crop_raster <- crop(x = ua_raster, y = shapefile, mask = FALSE)
 
   all_daily_layers[[j]] <- crop_raster
 }

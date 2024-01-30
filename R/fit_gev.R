@@ -11,17 +11,17 @@ fit_gev <- function(x) {
   # Fit a GEV distribution
   fit <- tryCatch(
     {
-      extRemes::fevd(x, type = "GEV", method = c("MLE"))
+      extRemes::fevd(x, type = "GEV", method = c("Lmoments"))
     },
     error = function(e) NULL
   )
 
   # Extract and return the location, scale, and shape parameters if fitting is successful
-  if (!is.null(fit) & fit[["results"]][["convergence"]] == 0) {
+  if (!is.null(fit)) {
     results <- c(
-      location = fit[["results"]][["par"]][["location"]],
-      scale = fit[["results"]][["par"]][["scale"]],
-      shape = fit[["results"]][["par"]][["shape"]]
+      location = fit[["results"]][["location"]],
+      scale = fit[["results"]][["scale"]],
+      shape = fit[["results"]][["shape"]]
     )
     return(as.vector(results))
   } else {

@@ -84,8 +84,14 @@ download_loca_nc_data <- function(nc_files_urls, variable_name = "pr",
     for (url in matching_urls) {
       file_name <- basename(url)
       destination <- file.path(specific_directory, file_name)
-      message(paste("Downloading", url, "to", destination))
-      download.file(url, destination, mode = "wb")
+      
+      # Check if the file already exists
+      if (!file.exists(destination)) {
+        message(paste("Downloading", url, "to", destination))
+        download.file(url, destination, mode = "wb")
+      } else {
+        message(paste("File already exists:", destination))
+      }
     }
   }
 }

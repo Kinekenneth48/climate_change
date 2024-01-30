@@ -7,47 +7,38 @@
 # ============================================================================#
 library(rsnodas)
 
-options(timeout = max(600, getOption("timeout"))) # increase timeout to 10mins
+options(timeout = max(6000, getOption("timeout"))) # increase timeout to 10mins
 
 # ============================================================================#
 # download daily snodas data
 # ============================================================================#
 # Define the start and end dates
 start_date <- as.Date("2003-10-01")
-end_date <- as.Date("2023-05-31")
+end_date <- as.Date("2023-07-31")
 
 # Generate a sequence of all days between start_date and end_date
 all_days <- seq(from = start_date, to = end_date, by = "days")
 
-# download_snodas(
-#   dates = all_days,
-#   masked = TRUE,
-#   overwrite = TRUE,
-#   remove_zip = TRUE,
-#   data_saved = c("swe"),
-#   out_dir = paste0(getwd(), "/data-raw/snodas"),
-#   GTiff = TRUE
-# )
 
 # Initialize an error log vector
 error_log <- character()
 
 # Loop through each date in all_days
-for (date in all_days) {
+for (i in 1:length(all_days)) {
   # Use tryCatch to handle errors
   tryCatch({
     download_snodas(
-      dates = date,
+      dates = all_days[i],
       masked = TRUE,
       overwrite = TRUE,
       remove_zip = TRUE,
       data_saved = c("swe"),
-      out_dir = paste0(getwd(), "/data-raw/snodas"),
+      out_dir = paste0("D:/data-raw/snodas"),
       GTiff = TRUE
     )
   }, error = function(e) {
     # If an error occurs, append it to the error_log
-    error_log <- c(error_log, paste("Date:", date, "Error:", e$message))
+    error_log <- c(error_log, paste("Date:", all_days[i], "Error:", e$message))
   })
 }
 
