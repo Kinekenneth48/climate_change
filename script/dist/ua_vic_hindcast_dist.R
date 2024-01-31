@@ -11,6 +11,7 @@ library(terra)
 source("R/fit_log_normal_less.R")
 source("R/fit_log_normal.R")
 source("R/fit_gev.R")
+source("R/fit_gev_less.R")
 
 
 # manage memory usage so PC doesn't crash
@@ -94,6 +95,14 @@ names(ua_hist_lnorm) <- c("mean", "sd")
 tictoc::toc()
 
 
+tictoc::tic()
+vic_hist_gev <- terra::app(vic, fit_gev_less, cores = 10)
+names(vic_hist_gev) <- c("location", "scale", "shape")
+
+ua_hist_gev <- terra::app(ua, fit_gev_less, cores = 10)
+names(ua_hist_gev) <- c("location", "scale", "shape")
+tictoc::toc()
+
 # ============================================================================#
 # create a mask
 # ============================================================================#
@@ -101,12 +110,12 @@ prism <- terra::rast("E:/data-raw/prism/raster/prism_day_ppt_raster.tif")[[1]]
 prism_mask <- project(prism, vic_hist_lnorm[[1]])
 
 vic_hist_lnorm <- terra::mask(vic_hist_lnorm, prism_mask)
-
+vic_hist_gev <- terra::mask(vic_hist_gev, prism_mask)
 
 
 
 # ============================================================================#
-# plot dist fit parameters
+# plot dist fit parameters lnorm
 # ============================================================================#
 # mean parameters
 # Set up a 1x2 layout for side-by-side plots
@@ -114,19 +123,20 @@ par(mfrow = c(2, 1))
 
 # Plot ua_hist_lnorm[[1]]
 plot(ua_hist_lnorm[[1]],
-     main = "Mean: lnorm of UA",
-     breaks = c(0, 50, 100, 200, 500, 1000, 1500, 2000, 2500)
+     main = "Mean: lnorm of UA: n=24",
+     breaks = c(0, 50, 100, 150,200, 500, 1000, 1500, 2000, 2500)
 )
 
 # Plot vic_hist_lnorm[[1]]
 plot(vic_hist_lnorm[[1]],
-     main = "Mean: lnorm of VIC",
-     breaks = c(0, 50, 100, 200, 500, 1000, 1500, 2000, 2500),
+     main = "Mean: lnorm of VIC: n=24",
+     breaks = c(0, 50, 100, 150,200, 500, 1000, 1500, 2000, 2500),
      legend = FALSE
 )
 
 
-
+# Reset the layout to the default (1 plot per page)
+par(mfrow = c(1, 1))
 
 
 
@@ -134,14 +144,82 @@ plot(vic_hist_lnorm[[1]],
 # Set up a 1x2 layout for side-by-side plots
 par(mfrow = c(2, 1))
 plot(ua_hist_lnorm[[2]],
-  main = "SD: lnorm of UA",
-  breaks = c(0, 2, 4, 6, 8, 10, 15, 20, 25, 30, 40, 50, 60)
+  main = "SD: lnorm of UA: n=24",
+  breaks = c(0, 5, 10, 15, 20,  30, 40, 2085686)
 )
 
 plot(vic_hist_lnorm[[2]],
-  main = "SD: lnorm of VIC",
-  breaks = c(0, 2, 4, 6, 8, 10, 15, 20, 25, 30, 40, 50, 60),
+  main = "SD: lnorm of VIC: n=24",
+  breaks = c(0, 5, 10, 15, 20, 30, 50,2085686),
   legend = FALSE
+)
+
+
+# Reset the layout to the default (1 plot per page)
+par(mfrow = c(1, 1))
+
+
+
+
+
+# ============================================================================#
+# plot dist fit parameters GEV
+# ============================================================================#
+# mean parameters
+# Set up a 1x2 layout for side-by-side plots
+par(mfrow = c(2, 1))
+
+# Plot ua_hist_lnorm[[1]]
+plot(ua_hist_gev[[1]],
+     main = "location: GEV of UA: n=24",
+     breaks = c(0, 50, 100, 150,200, 500, 1000, 1500, 2000, 2500)
+)
+
+# Plot vic_hist_lnorm[[1]]
+plot(vic_hist_gev[[1]],
+     main = "location: GEV of VIC: n=24",
+     breaks = c(0, 50, 100, 150,200, 500, 1000, 1500, 2000, 2500),
+     legend = FALSE
+)
+
+
+# Reset the layout to the default (1 plot per page)
+par(mfrow = c(1, 1))
+
+
+
+# sd parameters
+# Set up a 1x2 layout for side-by-side plots
+par(mfrow = c(2, 1))
+plot(ua_hist_gev[[2]],
+     main = "SD: GEV of UA: n=24",
+     breaks = c(0, 5, 10, 15, 20,  50,100, 1000, 20000),
+)
+
+plot(vic_hist_gev[[2]],
+     main = "SD: GEV of VIC: n=24",
+     breaks = c(0, 5, 10, 15, 20,  50,100, 1000, 20000),
+     legend = FALSE
+)
+
+
+# Reset the layout to the default (1 plot per page)
+par(mfrow = c(1, 1))
+
+
+
+# shape parameters
+# Set up a 1x2 layout for side-by-side plots
+par(mfrow = c(2, 1))
+plot(ua_hist_gev[[3]],
+     main = "SHAPE: GEV of UA: n=24",
+     breaks = c(-3,  -0.5, -0.25, 0,  0.25,0.5,  3),
+)
+
+plot(vic_hist_gev[[3]],
+     main = "SHAPE: GEV of VIC: n=24",
+     breaks = c(-3,  -0.5, -0.25, 0,  0.25,0.5,  3),
+     legend = FALSE
 )
 
 
