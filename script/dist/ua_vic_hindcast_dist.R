@@ -119,7 +119,7 @@ vic_hist_gev <- terra::mask(vic_hist_gev, prism_mask)
 # ============================================================================#
 # mean parameters
 # Set up a 1x2 layout for side-by-side plots
-par(mfrow = c(2, 1))
+par(mfcol = c(2, 2))
 
 # Plot ua_hist_lnorm[[1]]
 plot(ua_hist_lnorm[[1]],
@@ -136,13 +136,13 @@ plot(vic_hist_lnorm[[1]],
 
 
 # Reset the layout to the default (1 plot per page)
-par(mfrow = c(1, 1))
+#par(mfrow = c(1, 1))
 
 
 
 # sd parameters
 # Set up a 1x2 layout for side-by-side plots
-par(mfrow = c(2, 1))
+#par(mfrow = c(2, 1))
 plot(ua_hist_lnorm[[2]],
   main = "SD: lnorm of UA: n=24",
   breaks = c(0, 5, 10, 15, 20,  30, 40, 2085686)
@@ -167,7 +167,7 @@ par(mfrow = c(1, 1))
 # ============================================================================#
 # mean parameters
 # Set up a 1x2 layout for side-by-side plots
-par(mfrow = c(2, 1))
+par(mfcol = c(2, 2))
 
 # Plot ua_hist_lnorm[[1]]
 plot(ua_hist_gev[[1]],
@@ -184,13 +184,13 @@ plot(vic_hist_gev[[1]],
 
 
 # Reset the layout to the default (1 plot per page)
-par(mfrow = c(1, 1))
+#par(mfrow = c(1, 1))
 
 
 
 # sd parameters
 # Set up a 1x2 layout for side-by-side plots
-par(mfrow = c(2, 1))
+#par(mfrow = c(2, 1))
 plot(ua_hist_gev[[2]],
      main = "SD: GEV of UA: n=24",
      breaks = c(0, 5, 10, 15, 20,  50,100, 1000, 20000),

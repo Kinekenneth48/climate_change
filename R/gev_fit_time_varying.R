@@ -12,9 +12,9 @@ gev_fit_time_varying <- function(x) {
   }
 
   n_new <- length(x)
+  Time = 1:n_new
 
-  # Create a base matrix for ydat (time)
-  ydat_base <- matrix(rep(1:n_new, each = 1), nrow = n_new, ncol = 1)
+  data_df <- data.frame(Time, x)
 
 
   # Fit three GEV models with varying complexity:
@@ -28,10 +28,7 @@ gev_fit_time_varying <- function(x) {
 
   fit <- tryCatch(
     {
-      ismev::gev.fit(
-        xdat = x, ydat = ydat_base, mul = 1, show = FALSE,
-        method = "Nelder-Mead", maxit = 100000
-      )
+      extRemes::fevd(x, data_df,type = c("GEV"), location.fun=~Time)
     },
     error = function(e) NULL
   )
@@ -56,44 +53,51 @@ gev_fit_time_varying <- function(x) {
   # 
   # # Choose the best fitting model based on the deviance statistics(chi square at 5%)
   # fit <- if (D2 > 3.841) fit2 else if (D3 > 3.841) fit3 else fit1
+  
+  #t_values <- 1:n_new
+ # mu <- fit[["mle"]][1] * t_values
+  #sigma <- fit[["mle"]][2] * t_values
+ # xi <- fit[["mle"]][3] * t_values
 
-  # Initialize and calculate the location parameter (mu) for each time point
-  t_values <- 1:n_new
-  mu <- fit[["mle"]][1] + fit[["mle"]][2] * t_values
-
-  # Initialize the scale (sigma) and shape (xi) parameters
-  sigma <- rep(fit[["mle"]][3], n_new)
-  xi <- rep(fit[["mle"]][4], n_new)
-
-  # Update sigma and xi if the model includes time-varying scale and/or shape parameters
-  if (is.numeric(fit[["model"]][[2]]) && is.null(fit[["model"]][[3]])) {
-    sigma <- sigma + fit[["mle"]][4] * t_values
-    xi <- rep(fit[["mle"]][5], n_new)
-  } else if (is.numeric(fit[["model"]][[2]]) &&
-    is.numeric(fit[["model"]][[3]])) {
-    sigma <- sigma + fit[["mle"]][4] * t_values
-    xi <- fit[["mle"]][5] + fit[["mle"]][6] * t_values
-  }
+  # # Initialize and calculate the location parameter (mu) for each time point
+  # t_values <- 1:n_new
+  # mu <- fit[["mle"]][1] + fit[["mle"]][2] * t_values
+  # 
+  # # Initialize the scale (sigma) and shape (xi) parameters
+  # sigma <- rep(fit[["mle"]][3], n_new)
+  # xi <- rep(fit[["mle"]][4], n_new)
+  # 
+  # # Update sigma and xi if the model includes time-varying scale and/or shape parameters
+  # if (is.numeric(fit[["model"]][[2]]) && is.null(fit[["model"]][[3]])) {
+  #   sigma <- sigma + fit[["mle"]][4] * t_values
+  #   xi <- rep(fit[["mle"]][5], n_new)
+  # } else if (is.numeric(fit[["model"]][[2]]) &&
+  #   is.numeric(fit[["model"]][[3]])) {
+  #   sigma <- sigma + fit[["mle"]][4] * t_values
+  #   xi <- fit[["mle"]][5] + fit[["mle"]][6] * t_values
+  # }
 
 
   # Define a nested function to estimate quantiles based on the GEV parameters
-  estimate_quantile <- function(mu, sigma, xi, p) {
-    zp <- ifelse(xi != 0,
-      mu - sigma / xi * (1 - (-log(1 - p))^(-xi)),
-      mu - sigma * log(-log(1 - p))
-    )
-    return(zp)
-  }
+  #estimate_quantile <- function(mu, sigma, xi, p) {
+  #  zp <- ifelse(xi != 0,
+  #    mu - sigma / xi * (1 - (-log(1 - p))^(-xi)),
+  #    mu - sigma * log(-log(1 - p))
+  #  )
+  #  return(zp)
+ # }
 
   # Calculate return levels based on the estimated GEV parameters
-  rl <- estimate_quantile(mu, sigma, xi, p = 0.02)
+  #rl <- estimate_quantile(mu, sigma, xi, p = 0.02)
+  
+  rl= as.vector(return.level(fit,return.period = c(50)))
 
   if (length(rl) != n) {
     rl <- c(rl, rep(NA, (n - length(rl))))
   }
 
 
-  if (fit[["conv"]] == 0) {
+  if (fit[["results"]][["convergence"]] == 0) {
     return(rl)
   } else {
     return(rep(NA, n))

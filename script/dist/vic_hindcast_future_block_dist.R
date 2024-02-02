@@ -109,6 +109,7 @@ for (period in time_periods) {
 ## STEP2: FIT DISTRIBUTIONS (n=55)
 ################################################################################
 
+
 gev_fit_r45_2007_2057 = rast("E:/data-raw/dist_fit_vic/gev_fit_r45_2007_2057.tif")
 gev_fit_r45_2025_2075 = rast("E:/data-raw/dist_fit_vic/gev_fit_r45_2025_2075.tif")
 gev_fit_r45_2050_2100 = rast("E:/data-raw/dist_fit_vic/gev_fit_r45_2050_2100.tif")
@@ -125,7 +126,6 @@ lnorm_fit_r45_2050_2100 = rast("E:/data-raw/dist_fit_vic/lnorm_fit_r45_2050_2100
 lnorm_fit_r85_2007_2057 = rast("E:/data-raw/dist_fit_vic/lnorm_fit_r85_2007_2057.tif")
 lnorm_fit_r85_2025_2075 = rast("E:/data-raw/dist_fit_vic/lnorm_fit_r85_2025_2075.tif")
 lnorm_fit_r85_2050_2100 = rast("E:/data-raw/dist_fit_vic/lnorm_fit_r85_2050_2100.tif")
-
 
 # ============================================================================#
 # fit distr.
