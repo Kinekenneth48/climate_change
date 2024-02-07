@@ -1,6 +1,6 @@
 fit_gev_event <- function(x) {
   # Remove NA and non-positive values
-  x <- x[x > 0]
+  x <- x[x > 1]
   x <- na.omit(x)
   
   # Check if the length of the dataset is less than 30
@@ -11,13 +11,13 @@ fit_gev_event <- function(x) {
   # Fit a GEV distribution
   fit <- tryCatch(
     {
-      extRemes::fevd(x, type = "GEV", method = c("MLE"))
+      extRemes::fevd(x, type = "GEV", method = c("Lmoments"))
     },
     error = function(e) NULL
   )
   
   # Extract and return the location, scale, and shape parameters if fitting is successful
-  if (!is.null(fit) & fit[["results"]][["convergence"]] == 0) {
+  if (!is.null(fit)) {
     event <- extRemes::return.level(fit, return.period = c(50))[["50"]]
     return(event)
   } else {

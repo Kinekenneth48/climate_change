@@ -1,6 +1,6 @@
 fit_gev <- function(x) {
   # Remove NA and non-positive values
-  x <- x[x > 0]
+  x <- x[x > 1]
   x <- na.omit(x)
 
   # Check if the length of the dataset is less than 30

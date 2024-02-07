@@ -123,34 +123,34 @@ par(mfcol = c(2, 2))
 
 # Plot ua_hist_lnorm[[1]]
 plot(ua_hist_lnorm[[1]],
-     main = "Mean: lnorm of UA: n=24",
-     breaks = c(0, 50, 100, 150,200, 500, 1000, 1500, 2000, 2500)
+  main = "Mean: lnorm of UA: n=24",
+  breaks = c(0, 50, 100, 150, 200, 500, 1000, 1500, 2000, 2500)
 )
 
 # Plot vic_hist_lnorm[[1]]
 plot(vic_hist_lnorm[[1]],
-     main = "Mean: lnorm of VIC: n=24",
-     breaks = c(0, 50, 100, 150,200, 500, 1000, 1500, 2000, 2500),
-     legend = FALSE
+  main = "Mean: lnorm of VIC: n=24",
+  breaks = c(0, 50, 100, 150, 200, 500, 1000, 1500, 2000, 2500),
+  legend = FALSE
 )
 
 
 # Reset the layout to the default (1 plot per page)
-#par(mfrow = c(1, 1))
+# par(mfrow = c(1, 1))
 
 
 
 # sd parameters
 # Set up a 1x2 layout for side-by-side plots
-#par(mfrow = c(2, 1))
+# par(mfrow = c(2, 1))
 plot(ua_hist_lnorm[[2]],
   main = "SD: lnorm of UA: n=24",
-  breaks = c(0, 5, 10, 15, 20,  30, 40, 2085686)
+  breaks = c(0, 5, 10, 15, 20, 30, 50, 100, 500, 2100000)
 )
 
 plot(vic_hist_lnorm[[2]],
   main = "SD: lnorm of VIC: n=24",
-  breaks = c(0, 5, 10, 15, 20, 30, 50,2085686),
+  breaks = c(0, 5, 10, 15, 20, 30, 50, 100, 500, 2100000),
   legend = FALSE
 )
 
@@ -171,35 +171,35 @@ par(mfcol = c(2, 2))
 
 # Plot ua_hist_lnorm[[1]]
 plot(ua_hist_gev[[1]],
-     main = "location: GEV of UA: n=24",
-     breaks = c(0, 50, 100, 150,200, 500, 1000, 1500, 2000, 2500)
+  main = "location: GEV of UA: n=24",
+  breaks = c(0, 50, 100, 150, 200, 500, 1000, 1500, 2000, 2500)
 )
 
 # Plot vic_hist_lnorm[[1]]
 plot(vic_hist_gev[[1]],
-     main = "location: GEV of VIC: n=24",
-     breaks = c(0, 50, 100, 150,200, 500, 1000, 1500, 2000, 2500),
-     legend = FALSE
+  main = "location: GEV of VIC: n=24",
+  breaks = c(0, 50, 100, 150, 200, 500, 1000, 1500, 2000, 2500),
+  legend = FALSE
 )
 
 
 # Reset the layout to the default (1 plot per page)
-#par(mfrow = c(1, 1))
+# par(mfrow = c(1, 1))
 
 
 
 # sd parameters
 # Set up a 1x2 layout for side-by-side plots
-#par(mfrow = c(2, 1))
+# par(mfrow = c(2, 1))
 plot(ua_hist_gev[[2]],
-     main = "SD: GEV of UA: n=24",
-     breaks = c(0, 5, 10, 15, 20,  50,100, 1000, 20000),
+  main = "SD: GEV of UA: n=24",
+  breaks = c(0, 5, 10, 15, 20, 50, 100, 1000, 20000),
 )
 
 plot(vic_hist_gev[[2]],
-     main = "SD: GEV of VIC: n=24",
-     breaks = c(0, 5, 10, 15, 20,  50,100, 1000, 20000),
-     legend = FALSE
+  main = "SD: GEV of VIC: n=24",
+  breaks = c(0, 5, 10, 15, 20, 50, 100, 1000, 20000),
+  legend = FALSE
 )
 
 
@@ -212,14 +212,14 @@ par(mfrow = c(1, 1))
 # Set up a 1x2 layout for side-by-side plots
 par(mfrow = c(2, 1))
 plot(ua_hist_gev[[3]],
-     main = "SHAPE: GEV of UA: n=24",
-     breaks = c(-3,  -0.5, -0.25, 0,  0.25,0.5,  3),
+  main = "SHAPE: GEV of UA: n=24",
+  breaks = c(-3, -0.5, -0.25, 0, 0.25, 0.5, 3),
 )
 
 plot(vic_hist_gev[[3]],
-     main = "SHAPE: GEV of VIC: n=24",
-     breaks = c(-3,  -0.5, -0.25, 0,  0.25,0.5,  3),
-     legend = FALSE
+  main = "SHAPE: GEV of VIC: n=24",
+  breaks = c(-3, -0.5, -0.25, 0, 0.25, 0.5, 3),
+  legend = FALSE
 )
 
 

@@ -22,7 +22,8 @@ gev_fit_stat_nonstat <- function(x) {
     rl <- as.vector(return.level(stat_model, return.period = c(50)))
     return(rep(rl, n))
   } else {
-    shape_para <- extRemes::fevd(x, type = c("GEV"), method = c("Lmoments"))[["results"]][["shape"]]
+    shape_para <- extRemes::fevd(x, type = c("GEV"), 
+                                 method = c("Lmoments"))[["results"]][["shape"]]
     # shape is fixed
     stat_model <- tryCatch(
       {
@@ -31,7 +32,7 @@ gev_fit_stat_nonstat <- function(x) {
       error = function(e) NULL
     )
 
-    if (is.null(fit)) {
+    if (is.null(stat_model)) {
       return(rep(NA, n))
     }
 
@@ -61,9 +62,4 @@ gev_fit_stat_nonstat <- function(x) {
 
   return(rl)
 
-  # if ((stat_model[["convergence"]] == "successful")) {
-  #   return(rl)
-  # } else {
-  #   return(rep(NA, n))
-  # }
 }

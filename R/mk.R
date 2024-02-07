@@ -10,12 +10,12 @@ mk <- function(x) {
   }
   
   
-  test <- mk.test(x)
+  test <- trend::mk.test(x)
   p_value <- test[["p.value"]]
 
   if (p_value > 0.05) {
-    return(FALSE)
+    return(FALSE)  # no trend/ stat
   } else {
-    return(TRUE)
+    return(TRUE) #trend/ non stat
   }
 }

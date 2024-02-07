@@ -22,6 +22,8 @@ tictoc::tic()
 # Historical
 # ============================================================================#
 vic_hist <- terra::rast("E:/data-raw/NCAR/ACCESS1-0/historical/max_swe_vic_hist_access10.tif")
+vic_r45 <- terra::rast("E:/data-raw/NCAR/ACCESS1-0/future/max_swe_vic_rcp45_access10.tif")
+vic_r85 <- terra::rast("E:/data-raw/NCAR/ACCESS1-0/future/max_swe_vic_rcp85_access10.tif")
 
 tictoc::tic() # 265.6 sec elapsed- 5 mins
 vic_hist_lnorm <- terra::app(vic_hist, fit_log_normal, cores = 10)
@@ -47,7 +49,30 @@ terra::writeRaster(vic_hist_gev,
 vic_hist_lnorm <- rast("E:/data-raw/dist_fit_vic/vic_hist_lnorm.tif")
 vic_hist_gev <- rast("E:/data-raw/dist_fit_vic/vic_hist_gev.tif")
 
+tictoc::tic() # 265.6 sec elapsed- 5 mins
+vic_vic_r45_lnorm <- terra::app(vic_r45, fit_log_normal, cores = 10)
+vic_vic_r45_lnorm <- exp(vic_vic_r45_lnorm)
+names(vic_vic_r45_lnorm) <- c("mean", "sd")
 
+vic_vic_r85_lnorm <- terra::app(vic_r85, fit_log_normal, cores = 10)
+vic_vic_r85_lnorm <- exp(vic_vic_r85_lnorm)
+names(vic_vic_r85_lnorm) <- c("mean", "sd")
+tictoc::toc()
+
+tictoc::tic() # 30 mins
+vic_vic_r45_gev <- terra::app(vic_r45, fit_gev, cores = 10)
+names(vic_vic_r45_gev) <- c("location", "scale", "xi")
+
+vic_vic_r85_gev <- terra::app(vic_r85, fit_gev, cores = 10)
+names(vic_vic_r85_gev) <- c("location", "scale", "xi")
+tictoc::toc()
+#=============================================================================#
+plot(vic_hist_lnorm[[1]], breaks = c(0, 100, 200, 500, 1000, 5000, 7000, 10000))
+plot(vic_vic_r45_lnorm[[1]], breaks = c(0, 100, 200, 500, 1000, 5000, 7000, 10000))
+plot(vic_vic_r85_lnorm[[1]], breaks = c(0, 100, 200, 500, 1000, 5000, 7000, 10000))
+
+
+#=============================================================================#
 plot(vic_hist_lnorm)
 plot(vic_hist_lnorm[[1]], breaks = c(0, 100, 200, 500, 1000, 5000, 7000, 10000))
 plot(vic_hist_lnorm[[2]], breaks = c(0, 2, 4, 6, 8, 10, 15, 20, 25, 30, 40, 50, 60))
