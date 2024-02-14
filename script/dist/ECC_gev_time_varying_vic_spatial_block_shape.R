@@ -38,7 +38,15 @@ vic_hist <- terra::rast("E:/data-raw/NCAR/ACCESS1-0/historical/max_swe_vic_hist_
 # create a mask
 # ============================================================================#
 prism <- terra::rast("E:/data-raw/prism/raster/prism_day_ppt_raster.tif")[[1]]
-prism_mask <- project(prism, vic_r45[[1]])
+prism_mask_vic <- project(prism, vic_r45[[1]])
+
+
+writeRaster(prism_mask_vic,
+            "data-raw/mask/prism_mask_vic.tif",
+            overwrite = TRUE
+)
+
+prism_mask_vic = rast("data-raw/mask/prism_mask_vic.tif")
 
 
 ################################################################################
@@ -108,13 +116,14 @@ mean_ecc_r85 <- mean(ECC_vic_r85_spatial_block_shape, na.rm = TRUE)
 diff_event_r45 <- (mean_ecc_r45 - mean_ecc_hist) / mean_ecc_hist
 diff_event_r85 <- (mean_ecc_r85 - mean_ecc_hist) / mean_ecc_hist
 
-diff_event_r45<- terra::mask(diff_event_r45, prism_mask)
-diff_event_r85<- terra::mask(diff_event_r85, prism_mask)
+diff_event_r45 <- terra::mask(diff_event_r45, prism_mask_vic)
+diff_event_r85 <- terra::mask(diff_event_r85, prism_mask_vic)
 
 par(mfcol = c(1, 2), mar = c(5, 4, 4, 5) + 0.1)
 plot(diff_event_r45,
      breaks = c(-0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1, 3),
-     main = "diff in 50 year event r45 vs hindcast (nonstationary)",
+     main = "diff in 50 year event r45 vs hindcast (both nonstationary) - 
+     spatial blocking at 50 km",
      col = c(
        "#543005", "#8c510a", "#bf812d", "#dfc27d",
        "#c7eae5", "#80cdc1", "#35978f", "#01665e", "#003c30", "red"
@@ -123,7 +132,8 @@ plot(diff_event_r45,
 
 plot(diff_event_r85,
      breaks = c(-0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1, 3),
-     main = "diff in 50 year event r85 vs hindcast (nonstationary)",
+     main = "diff in 50 year event r85 vs hindcast (both nonstationary)- 
+     spatial blocking at 50 km",
      col = c(
        "#543005", "#8c510a", "#bf812d", "#dfc27d",
        "#c7eae5", "#80cdc1", "#35978f", "#01665e", "#003c30", "red"
@@ -194,6 +204,10 @@ writeRaster(ECC_vic_r85_full_spatial_block_shape,
 )
 
 
+ECC_vic_hist_full_spatial_block_shape = rast("E:data-raw/dist_fit_vic/ECC_vic_hist_full_spatial_block_shape.tif")
+ECC_vic_r45_full_spatial_block_shape = rast("E:data-raw/dist_fit_vic/ECC_vic_r45_full_spatial_block_shape.tif")
+ECC_vic_r85_full_spatial_block_shape = rast("E:data-raw/dist_fit_vic/ECC_vic_r85_full_spatial_block_shape.tif")
+
 
 mean_ecc_hist_full <- mean(ECC_vic_hist_full_spatial_block_shape, na.rm = TRUE)
 mean_ecc_r45_full <- mean(ECC_vic_r45_full_spatial_block_shape, na.rm = TRUE)
@@ -209,7 +223,8 @@ diff_event_r85_full <- terra::mask(diff_event_r85_full, prism_mask)
 par(mfcol = c(1, 2), mar = c(5, 4, 4, 5) + 0.1)
 plot(diff_event_r45_full,
      breaks = c(-0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1, 3),
-     main = "diff in 50 year event r45 vs hindcast (nonstationary)",
+     main = "diff in 50 year event r45 vs hindcast (nonstationary) 
+     spatial block at 50km",
      col = c(
        "#543005", "#8c510a", "#bf812d", "#dfc27d",
        "#c7eae5", "#80cdc1", "#35978f", "#01665e", "#003c30", "red"
@@ -218,7 +233,8 @@ plot(diff_event_r45_full,
 
 plot(diff_event_r85_full,
      breaks = c(-0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1, 3),
-     main = "diff in 50 year event r85 vs hindcast (nonstationary)",
+     main = "diff in 50 year event r85 vs hindcast (nonstationary)
+     spatial block at 50km",
      col = c(
        "#543005", "#8c510a", "#bf812d", "#dfc27d",
        "#c7eae5", "#80cdc1", "#35978f", "#01665e", "#003c30", "red"

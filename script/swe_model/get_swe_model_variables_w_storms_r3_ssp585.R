@@ -20,30 +20,30 @@ pr_r3 <- terra::rast("D:/data-raw/loca/ACCESS-CM2/pr/future/day/pr.ACCESS-CM2.ss
 pr_r33 <- terra::rast("D:/data-raw/loca/ACCESS-CM2/pr/future/day/pr.ACCESS-CM2.ssp585.r3i1p1f1.2045-2074.LOCA_16thdeg_v20220519.nc")
 pr_r333 <- terra::rast("D:/data-raw/loca/ACCESS-CM2/pr/future/day/pr.ACCESS-CM2.ssp585.r3i1p1f1.2075-2100.LOCA_16thdeg_v20220519.nc")
 
-tmax_r3 <- terra::rast("data-raw/test_r2/tasmax.ACCESS-CM2.ssp585.r1i1p1f1.2015-2044.LOCA_16thdeg_v20220413.nc")
-tmax_r33 <- terra::rast("data-raw/test_r2/tasmax.ACCESS-CM2.ssp585.r1i1p1f1.2045-2074.LOCA_16thdeg_v20220413.nc")
-tmax_r333 <- terra::rast("data-raw/test_r2/tasmax.ACCESS-CM2.ssp585.r1i1p1f1.2075-2100.LOCA_16thdeg_v20220413.nc")
+tmax_r3 <- terra::rast("data-raw/test_r3/tasmax.ACCESS-CM2.ssp585.r3i1p1f1.2015-2044.LOCA_16thdeg_v20220413.nc")
+tmax_r33 <- terra::rast("data-raw/test_r3/tasmax.ACCESS-CM2.ssp585.r3i1p1f1.2045-2074.LOCA_16thdeg_v20220413.nc")
+tmax_r333 <- terra::rast("data-raw/test_r3/tasmax.ACCESS-CM2.ssp585.r3i1p1f1.2075-2100.LOCA_16thdeg_v20220413.nc")
 
-tmin_r3 <- terra::rast("data-raw/test_r2/tasmin.ACCESS-CM2.ssp585.r1i1p1f1.2015-2044.LOCA_16thdeg_v20220413.nc")
-tmin_r33 <- terra::rast("data-raw/test_r2/tasmin.ACCESS-CM2.ssp585.r1i1p1f1.2045-2074.LOCA_16thdeg_v20220413.nc")
-tmin_r333 <- terra::rast("data-raw/test_r2/tasmin.ACCESS-CM2.ssp585.r1i1p1f1.2075-2100.LOCA_16thdeg_v20220413.nc")
+tmin_r3 <- terra::rast("data-raw/test_r3/tasmin.ACCESS-CM2.ssp585.r3i1p1f1.2015-2044.LOCA_16thdeg_v20220413.nc")
+tmin_r33 <- terra::rast("data-raw/test_r3/tasmin.ACCESS-CM2.ssp585.r3i1p1f1.2045-2074.LOCA_16thdeg_v20220413.nc")
+tmin_r333 <- terra::rast("data-raw/test_r3/tasmin.ACCESS-CM2.ssp585.r3i1p1f1.2075-2100.LOCA_16thdeg_v20220413.nc")
 
 
 
 
 loca_pr_r3_ssp585_day <- c(pr_r3, pr_r33, pr_r333)
-tmax <- c(tmax_r2, tmax_r22, tmax_r222)
-tmin <- c(tmin_r2, tmin_r22, tmin_r222)
+tmax <- c(tmax_r3, tmax_r33, tmax_r333)
+tmin <- c(tmin_r3, tmin_r33, tmin_r333)
 
 tictoc::tic()
-loca_tmean_r2_ssp585_day <- (tmax + tmin) / 2
+loca_tmean_r3_ssp585_day <- (tmax + tmin) / 2
 tictoc::toc()
 
 tictoc::tic()
 writeRaster(loca_pr_r3_ssp585_day, 
             "E:/data-raw/swe_model_vars/ssp585/r3/loca_pr_r3_ssp585_day.tif",
             overwrite=TRUE)
-writeRaster(loca_tmean_r2_ssp585_day, "data-raw/test_r2/loca_tmean_r2_ssp585_day.tif")
+writeRaster(loca_tmean_r3_ssp585_day, "data-raw/test_r3/loca_tmean_r3_ssp585_day.tif")
 tictoc::toc()
 
 loca_pr <- rast("data-raw/test_r1/loca_pr_r1_ssp585_day.tif")
