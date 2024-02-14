@@ -2,6 +2,8 @@
 gev_fit_time_varying <- function(x) {
   n <- length(x)
   
+  shape_para <- tail(x,1)
+  
   # Remove NA and non-positive values
   x <- x[x > 1]
   x <- na.omit(x)
@@ -14,8 +16,9 @@ gev_fit_time_varying <- function(x) {
   n_new <- length(x)
   
  
-  shape_para <- extRemes::fevd(x, type = c("GEV"), 
-                               method = c("Lmoments"))[["results"]][["shape"]]
+ # shape_para <- extRemes::fevd(x, type = c("GEV"), 
+  #                             method = c("Lmoments"))[["results"]][["shape"]]
+  
   # shape is fixed
   stat_model <- tryCatch(
     {
