@@ -37,14 +37,14 @@ vic_hist <- terra::rast("E:/data-raw/NCAR/ACCESS1-0/historical/max_swe_vic_hist_
 # ============================================================================#
 # create a mask
 # ============================================================================#
-prism <- terra::rast("E:/data-raw/prism/raster/prism_day_ppt_raster.tif")[[1]]
-prism_mask_vic <- project(prism, vic_r45[[1]])
-
-
-writeRaster(prism_mask_vic,
-            "data-raw/mask/prism_mask_vic.tif",
-            overwrite = TRUE
-)
+# prism <- terra::rast("E:/data-raw/prism/raster/prism_day_ppt_raster.tif")[[1]]
+# prism_mask_vic <- project(prism, vic_r45[[1]])
+# 
+# 
+# writeRaster(prism_mask_vic,
+#             "data-raw/mask/prism_mask_vic.tif",
+#             overwrite = TRUE
+# )
 
 prism_mask_vic = rast("data-raw/mask/prism_mask_vic.tif")
 
@@ -118,6 +118,17 @@ diff_event_r85 <- (mean_ecc_r85 - mean_ecc_hist) / mean_ecc_hist
 
 diff_event_r45 <- terra::mask(diff_event_r45, prism_mask_vic)
 diff_event_r85 <- terra::mask(diff_event_r85, prism_mask_vic)
+
+writeRaster(diff_event_r45,
+            "E:data-raw/dist_fit_vic/diff_event_r45.tif",
+            overwrite = TRUE
+)
+
+writeRaster(diff_event_r85,
+            "E:data-raw/dist_fit_vic/diff_event_r85.tif",
+            overwrite = TRUE
+)
+
 
 par(mfcol = c(1, 2), mar = c(5, 4, 4, 5) + 0.1)
 plot(diff_event_r45,

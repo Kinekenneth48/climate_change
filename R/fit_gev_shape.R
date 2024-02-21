@@ -4,7 +4,7 @@ fit_gev_shape <- function(x) {
   x <- na.omit(x)
   
   # Check if the length of the dataset is less than 30
-  if (length(x) < 30) {
+  if (length(x) < 20) {
     return(as.vector(c(shape = NA)))
   }
   

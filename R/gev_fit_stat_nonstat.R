@@ -13,13 +13,13 @@ gev_fit_stat_nonstat <- function(x) {
 
   n_new <- length(x)
 
-  test <- mk.test(x)
+  test <- trend::mk.test(x)
   p_value <- test[["p.value"]]
 
   if (p_value > 0.05) {
     # stationary
     stat_model <- extRemes::fevd(x, type = c("GEV"), method = c("Lmoments"))
-    rl <- as.vector(return.level(stat_model, return.period = c(50)))
+    rl <- as.vector(extRemes::return.level(stat_model, return.period = c(50)))
     return(rep(rl, n))
   } else {
     shape_para <- extRemes::fevd(x, type = c("GEV"), 

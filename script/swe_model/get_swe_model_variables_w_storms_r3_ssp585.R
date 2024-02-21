@@ -11,7 +11,7 @@ source("R/find_top_storm_sums_w_index.R")
 
 
 # manage memory usage so PC doesn't crash
-terraOptions(memfrac = 0.85, verbose = TRUE)
+terraOptions(memfrac = 0.8, verbose = TRUE)
 
 # ============================================================================#
 # load data
@@ -43,11 +43,13 @@ tictoc::tic()
 writeRaster(loca_pr_r3_ssp585_day, 
             "E:/data-raw/swe_model_vars/ssp585/r3/loca_pr_r3_ssp585_day.tif",
             overwrite=TRUE)
-writeRaster(loca_tmean_r3_ssp585_day, "data-raw/test_r3/loca_tmean_r3_ssp585_day.tif")
+
+writeRaster(loca_tmean_r3_ssp585_day,
+            "data-raw/test_r3/loca_tmean_r3_ssp585_day.tif")
 tictoc::toc()
 
 loca_pr <- rast("data-raw/test_r1/loca_pr_r1_ssp585_day.tif")
-loca_tas <- rast("data-raw/test_r1/loca_tmean_r1_ssp585_day.tif")
+loca_tas <- rast("data-raw/test_r3/loca_tmean_r3_ssp585_day.tif")
 
 # ============================================================================#
 # match the dates for both rasters

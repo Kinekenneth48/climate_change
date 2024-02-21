@@ -237,51 +237,56 @@ storm_three_r1_ssp585 <- terra::rast(storm_three_list)
 
 # Save the resulting multi-layer raster layers
 writeRaster(temp_diff_r1_ssp585,
-  "data-raw/swe_model_vars/ssp585/r1/r1_model_vars/temp_diff_r1_ssp585.tif",
+  "E:/data-raw/swe_model_vars/ssp585/r1/r1_model_vars/temp_diff_r1_ssp585.tif",
   overwrite = TRUE
 )
 
 writeRaster(mean_temp_r1_ssp585,
-  "data-raw/swe_model_vars/ssp585/r1/r1_model_vars/mean_temp_r1_ssp585.tif",
+  "E:/data-raw/swe_model_vars/ssp585/r1/r1_model_vars/mean_temp_r1_ssp585.tif",
   overwrite = TRUE
 )
 
 writeRaster(total_ppt_r1_ssp585,
-  "data-raw/swe_model_vars/ssp585/r1/r1_model_vars/total_ppt_r1_ssp585.tif",
+  "E:/data-raw/swe_model_vars/ssp585/r1/r1_model_vars/total_ppt_r1_ssp585.tif",
   overwrite = TRUE
 )
 
 
 writeRaster(snow_window_r1_ssp585,
-  "data-raw/swe_model_vars/ssp585/r1/r1_model_vars/snow_window_r1_ssp585.tif",
+  "E:/data-raw/swe_model_vars/ssp585/r1/r1_model_vars/snow_window_r1_ssp585.tif",
   overwrite = TRUE
 )
 
 
 writeRaster(storm_one_temp_r1_ssp585,
-  "data-raw/swe_model_vars/ssp585/r1/r1_model_vars/storm_one_temp_r1_ssp585.tif",
+  "E:/data-raw/swe_model_vars/ssp585/r1/r1_model_vars/storm_one_temp_r1_ssp585.tif",
   overwrite = TRUE
 )
 
 writeRaster(storm_two_temp_r1_ssp585,
-  "data-raw/swe_model_vars/ssp585/r1/r1_model_vars/storm_two_temp_r1_ssp585.tif",
+  "E:/data-raw/swe_model_vars/ssp585/r1/r1_model_vars/storm_two_temp_r1_ssp585.tif",
   overwrite = TRUE
 )
 writeRaster(storm_three_temp_r1_ssp585,
-  "data-raw/swe_model_vars/ssp585/r1/r1_model_vars/storm_three_temp_r1_ssp585.tif",
+  "E:/data-raw/swe_model_vars/ssp585/r1/r1_model_vars/storm_three_temp_r1_ssp585.tif",
   overwrite = TRUE
 )
 
 writeRaster(storm_one_r1_ssp585,
-  "data-raw/swe_model_vars/ssp585/r1/r1_model_vars/storm_one_r1_ssp585.tif",
+  "E:/data-raw/swe_model_vars/ssp585/r1/r1_model_vars/storm_one_r1_ssp585.tif",
   overwrite = TRUE
 )
 
 writeRaster(storm_two_r1_ssp585,
-  "data-raw/swe_model_vars/ssp585/r1/r1_model_vars/storm_two_r1_ssp585s.tif",
+  "E:/data-raw/swe_model_vars/ssp585/r1/r1_model_vars/storm_two_r1_ssp585s.tif",
   overwrite = TRUE
 )
 writeRaster(storm_three_r1_ssp585,
-  "data-raw/swe_model_vars/ssp585/r1/r1_model_vars/storm_three_r1_ssp585.tif",
+  "E:/data-raw/swe_model_vars/ssp585/r1/r1_model_vars/storm_three_r1_ssp585.tif",
   overwrite = TRUE
 )
+
+
+
+
+

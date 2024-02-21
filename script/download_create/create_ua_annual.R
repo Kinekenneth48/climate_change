@@ -38,7 +38,7 @@ for (j in 1:length(file_list)) {
     ua_raster <- ua_raster[[1:365]]  # Get only SWE for non-leap year
   }
   
-  max_swe_raster[[j]] = max(swe_raster, na.rm = TRUE)
+  max_swe_raster[[j]] = max(ua_raster, na.rm = TRUE)
   }
 tictoc::toc()
 
