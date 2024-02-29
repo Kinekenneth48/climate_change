@@ -180,7 +180,7 @@ diff <- future_mean_r - hist_mean_r
 plot(diff,
      breaks = c( -500, -250, -100, -50, -25, 0 , 1),
      col = c("#543005","#8c510a","#bf812d","#dfc27d","#f6e8c3","#80cdc1"),
-     main = "Difference in mean snow amount: Hindcast vs Future"
+     main = "Difference in mean snow amount (Canada): Hindcast vs Future"
 )
 
 
@@ -231,7 +231,7 @@ diff_event_full <- (mean_ecc_full - mean_ecc_hist) / mean_ecc_hist
 par(mfcol = c(1, 2), mar = c(5, 4, 4, 5) + 0.1)
 plot(diff_event_future,
      breaks = c(-0.7, -0.6, -0.4, -0.2, 0, 0.2, 0.3, 0.4),
-     main = "diff in 50 year event r1 vs UA ",
+     main = "diff in 50 year event r1 vs UA (all stationary)",
      col = c(
        "#543005", "#8c510a", "#bf812d", "#dfc27d",
        "#c7eae5", "#80cdc1", "#35978f", "#01665e"
@@ -240,7 +240,7 @@ plot(diff_event_future,
 
 plot(diff_event_full,
      breaks = c(-0.7, -0.6, -0.4, -0.2, 0, 0.2, 0.3, 0.4),
-     main = "diff in 50 year event r1 vs UA (FULL)",
+     main = "diff in 50 year event r1 vs UA (FULL)-(all stationary)",
      col = c(
        "#543005", "#8c510a", "#bf812d", "#dfc27d",
        "#c7eae5", "#80cdc1", "#35978f", "#01665e"

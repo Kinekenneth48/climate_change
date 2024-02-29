@@ -566,7 +566,7 @@ library(datawizard)
 
 terraOptions(memfrac = 0.8, verbose = TRUE)
 
-base::load("E:/data-raw/swe_model_vars/storm_prism/model/model_vars_df_III_storms_prism.RData")
+base::load("E:/data-raw/swe_model_vars/storm_prism/model/train_data/model_vars_df_III_storms_prism.RData")
 
 # ============================================================================#
 # pre-process data
@@ -673,6 +673,8 @@ rf_storms_prism <- ranger::ranger(
 save(rf_storms_prism, file = "E:/data-raw/swe_model_vars/storm_prism/model/rf_storms_prism.RData")
 
 load("E:/data-raw/swe_model_vars/storm_prism/model/rf_storms_prism.RData")
+
+vip::vi_model(rf_storms_prism)
 
 # Get names of TIFF files in the folder
 tif_files <- list.files("E:/data-raw/swe_model_vars/storm_prism/model/test_data/",
