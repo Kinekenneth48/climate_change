@@ -82,6 +82,35 @@ rmse <- mean(rmse)
 mae
 rmse
 
+error_2011_2014 = diff_hist[[30:33]]
+names(error_2011_2014) <- c("2011", "2012", "2013", "2014")
+
+ggplot() +
+  geom_spatraster_contour_filled(
+    data = error_2011_2014,
+    breaks = c(-2000,  -100, -50, -25, -10, 0, 10, 25, 50, 100,  2000)
+  ) +
+  facet_wrap(~lyr, ncol = 2) +
+  scale_fill_manual(
+    name = "Diff. in SWE ",
+    values = c(
+      "#543005", "#8c510a", "#bf812d", "#dfc27d", "#f6e8c3",
+      "#c7eae5", "#80cdc1", "#35978f", "#01665e", "#003c30"
+    ), na.translate = F,
+    guide = guide_legend(reverse = TRUE)
+  ) +
+  geom_spatvector(data = conus, fill = NA, color = "grey40") +
+  xlab("Longitude") +
+  ylab("Latitude") +
+  theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
+  coord_sf(crs = 4326) +
+  theme(
+   # legend.position = c(0.9, 0.23),
+    legend.title = element_text(size = 30),
+    legend.text = element_text(size = 30),
+    axis.title = element_text(size = 30),
+    axis.text = element_text(size = 25)
+  )
 
 
 par(mfcol = c(2, 2), mar = c(5, 4, 4, 5) + 0.1)

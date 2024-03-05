@@ -4,7 +4,7 @@ library(terra)
 terraOptions(memfrac = 0.80, verbose = TRUE)
 
 # Specify the directory containing the .nc files, replace "./" with your directory path if needed
-directory_path <- "D:/data-raw/NCAR/met/ACCESS1-0/historical/"
+directory_path <- "C:/Users/KENNETH/OneDrive - USU/Desktop/met/ACCESS1-0/historical/"
 
 # List all files that start with 'pr' and end with '.nc'
 files_tmin <- list.files(path = directory_path, pattern = "^tasmin.*\\.nc$", full.names = TRUE)

@@ -122,6 +122,7 @@ plot(mean_future_r45_full, breaks = c(0, 10, 25, 50, 100, 500, 5000), main = "fu
 plot(mean_future_r85_full, breaks = c(0, 10, 25, 50, 100, 500, 5000), main = "future r85", legend = FALSE)
 par(mfrow = c(1, 1))
 
+
 ################################################################################
 ## STEP 2: fit dist for stationarity and non-stationarity
 ################################################################################
@@ -386,76 +387,5 @@ plot(diff_event_r85_full_stat_mix,
 par(mfrow = c(1, 1))
 
 
-# ============================================================================#
-# full Hindcast -stat  future - stat
-# ============================================================================#
 
 
-
-
-# ============================================================================#
-points <- terra::as.data.frame(max_ecc, xy = TRUE, na.rm = FALSE)
-
-lon <- -94.03125
-lat <- 32.46875
-t <- data.frame(lon, lat)
-
-future_points <- (as.vector(unlist(extract(vic_r45, t))))
-hist_points <- (as.vector(unlist(extract(vic_hist, t))))
-future_points <- future_points[future_points > 1]
-hist_points <- hist_points[hist_points > 1]
-
-time <- 1:length(future_points)
-data <- data.frame(future_points, time)
-n <- length
-
-sp <- fevd(future_points, type = c("GEV"), method = c("Lmoments"))[["results"]][["shape"]]
-M3 <- fgev(future_points, shape = sp)
-
-sp <- fevd(hist_points, type = c("GEV"), method = c("Lmoments"))[["results"]][["shape"]]
-M33 <- fgev(hist_points, shape = sp)
-
-sp <- fevd(hist_points, type = c("GEV"), method = c("Lmoments"))[["results"]][["shape"]]
-M33 <- fgev(hist_points, nsloc = 1:length(hist_points), shape = sp)
-
-
-r <- ismev::gev.fit(
-  xdat = future_points, ydat = matrix(rep(1:n, each = 1), nrow = n, ncol = 1),
-  mul = 1,
-  method = "Nelder-Mead", maxit = 100000
-)
-
-plot(future_points)
-plot(hist_points)
-
-fit00 <- fevd(hist_points, type = c("GEV"), method = c("Lmoments"))
-fit01 <- fevd(hist_points, type = c("GEV"))
-
-fit21 <- fevd(future_points, type = c("GEV"), method = c("Lmoments"))
-fit22 <- fevd(future_points, type = c("GEV"))
-
-return.level(fit00, return.period = c(50))
-return.level(fit01, return.period = c(50))
-
-return.level(fit21, return.period = c(50))
-return.level(fit22, return.period = c(50))
-
-estimate_quantile(mu = 0.9307, sigma = 1.4606, xi = 0.5693192, p = 0.02)
-estimate_quantile(mu = 3.797, sigma = 4.998, xi = 0.2189842, p = 0.02)
-
-estimate_quantile(mu = 5.301, sigma = 5.008, xi = 0.3997378, p = 0.02)
-estimate_quantile(mu = 7.369, sigma = 6.513, xi = 0.07120665, p = 0.02)
-qgev(p = 0.02, loc = 7.369, scale = 6.513, shape = 0.07120665, lower.tail = FALSE)
-
-par(mfcol = c(2, 2))
-plot(max_ecc, breaks = c(0, 50, 100, 500, 1000, 2000, 5000), main = "ECC max")
-plot(mean_ecc, breaks = c(0, 50, 100, 500, 1000, 2000, 5000), main = "ECC mean")
-plot(min_ecc, breaks = c(0, 50, 100, 500, 1000, 2000, 5000), main = "ECC min")
-
-par(mfrow = c(1, 1))
-
-# constant risk plot: the risk that the highest snow load in a year is larger than
-# 7.6 is less than 0.02
-plot(max_ecc)
-plot(mean_ecc)
-plot(min_ecc)
