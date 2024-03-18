@@ -129,7 +129,7 @@ for (i in 1:length(files_tmin_r85)) {
 tmin <- terra::rast(x = files_tmin_r85[i])
   tmax <- terra::rast(x = files_tmax_r85[i])
   
-  tmean_r85_list[[i]] = (tmin+tmax)/2
+  tmean_r85_list[[i]] = (tmin + tmax)/2
   gc()
   
   remove(tmin,tmax)

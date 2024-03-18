@@ -11,12 +11,8 @@ pacman::p_load(
 )
 
 
-source("R/gev_fit_time_varying.R")
-source("R/fit_gev_shape.R")
-source("R/fit_gev_event.R")
 source("R/mk.R")
-source("R/rl_gev_time_data_w_shape.R")
-
+source("R/gev_fit_stat_nonstat.R")
 
 # manage memory usage so PC doesn't crash
 terraOptions(memfrac = 0.80, verbose = TRUE)
@@ -24,9 +20,9 @@ terraOptions(memfrac = 0.80, verbose = TRUE)
 # ============================================================================#
 # load the data
 # ============================================================================#
-vic_r45 <- terra::rast("E:/data-raw/NCAR/ACCESS1-0/future/max_swe_vic_rcp45_access10.tif")
-vic_r85 <- terra::rast("E:/data-raw/NCAR/ACCESS1-0/future/max_swe_vic_rcp85_access10.tif")
-vic_hist <- terra::rast("E:/data-raw/NCAR/ACCESS1-0/historical/max_swe_vic_hist_access10.tif")
+vic_r45 <- terra::rast("E:/data-raw/NCAR/ACCESS1-3/future/max_swe_vic_rcp45_access13.tif")
+vic_r85 <- terra::rast("E:/data-raw/NCAR/ACCESS1-3/future/max_swe_vic_rcp85_access13.tif")
+vic_hist <- terra::rast("E:/data-raw/NCAR/ACCESS1-3/historical/max_swe_vic_hist_access13.tif")
 
 
 # ==============================================================================
@@ -68,14 +64,6 @@ prism_mask_vic <- terra::rast("data-raw/mask/prism_mask_vic.tif")
 mk_vic <- terra::mask(mk_vic, prism_mask_vic)
 
 
-par(mfcol = c(2, 2))
-plot(mk_test_hist, main = "hist (0:stat / 1:non-stat)")
-plot(mk_test_R45, main = "future r45 (0:stat / 1:non-stat)", legend = FALSE)
-plot(mk_test_R85, main = "future r85 (0:stat / 1:non-stat)", legend = FALSE)
-par(mfrow = c(1, 1))
-
-
-
 ggplot() +
   geom_spatraster(
     data = mk_vic
@@ -108,65 +96,65 @@ ggplot() +
 
 
 ################################################################################
-## STEP 2: Fit dist (HIST- STAT: FUTURE-NONSTAT) independent
+## STEP 2: Fit dist (HIST- mix STAT: FUTURE-mix STAT) independent
 ################################################################################
 
 
-# estimate shape parameter with Lmoments
-vic_r45_shape <- terra::app(vic_r45, fun = fit_gev_shape, cores = 12)
-vic_r85_shape <- terra::app(vic_r85, fun = fit_gev_shape, cores = 12)
-
-
-# add the shape parameter to the end of the data
-vic_r45_w_shape <- c(vic_r45, vic_r45_shape)
-vic_r85_w_shape <- c(vic_r85, vic_r85_shape)
-
-
 # fit dist and estimate MRI (mean is varying for future scenarios)
-ECC_vic_r45_stat_nonstat <- terra::app(vic_r45_w_shape,
-  fun = rl_gev_time_data_w_shape, cores = 12
+ECC_vic_r45_mixstat_access13 <- terra::app(vic_r45,
+  fun = gev_fit_stat_nonstat, cores = 12
 )
 
-ECC_vic_r85_stat_nonstat <- terra::app(vic_r85_w_shape,
-  fun = rl_gev_time_data_w_shape, cores = 12
+ECC_vic_r85_mixstat_access13 <- terra::app(vic_r85,
+  fun = gev_fit_stat_nonstat, cores = 12
 )
 
-ECC_vic_hist_stat_nonstat <- terra::app(vic_hist,
-  fun = fit_gev_event, cores = 12
+ECC_vic_hist_mixstat_access13 <- terra::app(vic_hist,
+  fun = gev_fit_stat_nonstat, cores = 12
 )
 
 
-writeRaster(ECC_vic_r45_stat_nonstat,
-  "E:data-raw/dist_fit_vic/ECC_vic_r45_stat_nonstat.tif",
+writeRaster(ECC_vic_r45_mixstat_access13,
+  "E:data-raw/dist_fit_vic/access13/ECC_vic_r45_mixstat_access13.tif",
   overwrite = TRUE
 )
 
-writeRaster(ECC_vic_r85_stat_nonstat,
-  "E:data-raw/dist_fit_vic/ECC_vic_r85_stat_nonstat.tif",
+writeRaster(ECC_vic_r85_mixstat_access13,
+  "E:data-raw/dist_fit_vic/access13/ECC_vic_r85_mixstat_access13.tif",
   overwrite = TRUE
 )
 
-writeRaster(ECC_vic_hist_stat_nonstat,
-  "E:data-raw/dist_fit_vic/ECC_vic_hist_stat_nonstat.tif",
+writeRaster(ECC_vic_hist_mixstat_access13,
+  "E:data-raw/dist_fit_vic/access13/ECC_vic_hist_mixstat_access13.tif",
   overwrite = TRUE
 )
 
+ECC_vic_hist_mixstat_access13 <-
+  rast("E:data-raw/dist_fit_vic/access13/ECC_vic_hist_mixstat_access13.tif")
 
-mean_ecc_r45_stat_nonstat <- mean(ECC_vic_r45_stat_nonstat, na.rm = TRUE)
-mean_ecc_hist_stat_nonstat <- mean(ECC_vic_hist_stat_nonstat, na.rm = TRUE)
-mean_ecc_r85_stat_nonstat <- mean(ECC_vic_r85_stat_nonstat, na.rm = TRUE)
+ECC_vic_r85_mixstat_access13 <-
+  rast("E:data-raw/dist_fit_vic/access13/ECC_vic_r85_mixstat_access13.tif")
+
+ECC_vic_r45_mixstat_access13 <-
+  rast("E:data-raw/dist_fit_vic/access13/ECC_vic_r45_mixstat_access13.tif")
+
+mean_ecc_r45_mixstat_access13 <- mean(ECC_vic_r45_mixstat_access13, na.rm = TRUE)
+mean_ecc_hist_mixstat_access13 <- mean(ECC_vic_hist_mixstat_access13, na.rm = TRUE)
+mean_ecc_r85_mixstat_access13 <- mean(ECC_vic_r85_mixstat_access13, na.rm = TRUE)
 
 prism_mask_vic <- rast("data-raw/mask/prism_mask_vic.tif")
 
-diff_event_r45_stat_nonstat <- (mean_ecc_r45_stat_nonstat - mean_ecc_hist_stat_nonstat) / mean_ecc_hist_stat_nonstat
-diff_event_r85_stat_nonstat <- (mean_ecc_r85_stat_nonstat - mean_ecc_hist_stat_nonstat) / mean_ecc_hist_stat_nonstat
+diff_event_r45_mixstat_access13 <- (mean_ecc_r45_mixstat_access13 - mean_ecc_hist_mixstat_access13) /
+  mean_ecc_hist_mixstat_access13
+diff_event_r85_mixstat_access13 <- (mean_ecc_r85_mixstat_access13 - mean_ecc_hist_mixstat_access13) /
+  mean_ecc_hist_mixstat_access13
 
-diff_event_r45_stat_nonstat <- terra::mask(diff_event_r45_stat_nonstat, prism_mask_vic)
-diff_event_r85_stat_nonstat <- terra::mask(diff_event_r85_stat_nonstat, prism_mask_vic)
+diff_event_r45_mixstat_access13 <- terra::mask(diff_event_r45_mixstat_access13, prism_mask_vic)
+diff_event_r85_mixstat_access13 <- terra::mask(diff_event_r85_mixstat_access13, prism_mask_vic)
 
 ggplot() +
   geom_spatraster_contour_filled(
-    data = diff_event_r45_stat_nonstat,
+    data = diff_event_r45_mixstat_access13,
     breaks = c(-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1)
   ) +
   scale_fill_manual(
@@ -192,7 +180,7 @@ ggplot() +
 
 ggplot() +
   geom_spatraster_contour_filled(
-    data = diff_event_r85_stat_nonstat,
+    data = diff_event_r85_mixstat_access13,
     breaks = c(-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1)
   ) +
   scale_fill_manual(
@@ -206,6 +194,7 @@ ggplot() +
   geom_spatvector(data = conus, fill = NA, color = "grey40") +
   xlab("Longitude") +
   ylab("Latitude") +
+  ggtitle("ACCESS13 R45 FULL") +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(
@@ -216,6 +205,42 @@ ggplot() +
     axis.text = element_text(size = 30)
   )
 
+
+
+################################################################################
+diff_r45_r85 <- c(diff_event_r45_mixstat_access13, diff_event_r85_mixstat_access13)
+names(diff_r45_r85) <- c("r45", "r85")
+
+
+ggplot() +
+  geom_spatraster_contour_filled(
+    data = diff_r45_r85,
+    breaks = c(-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1)
+  ) +
+  facet_wrap(~lyr, nrow = 2) +
+  scale_fill_manual(
+    name = "MRI Percent \n Change",
+    values = c(
+      # "#543005",
+      "#8c510a", "#bf812d", "#dfc27d", "#f6e8c3",
+      "#c7eae5", "#80cdc1", "#35978f", "#01665e", "#003c30"
+    ), na.translate = F,
+    guide = guide_legend(reverse = TRUE)
+  ) +
+  geom_spatvector(data = conus, fill = NA, color = "grey40") +
+  xlab("Longitude") +
+  ylab("Latitude") +
+  ggtitle("ACCESS13: MRI Percent Change (MS method)") +
+  theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
+  coord_sf(crs = 4326) +
+  theme(
+    # legend.position = c(0.95, 0.4),
+    legend.title = element_text(size = 30),
+    legend.text = element_text(size = 30),
+    axis.title = element_text(size = 30),
+    axis.text = element_text(size = 20),
+    strip.text = element_text(size = 30)
+  )
 
 
 
@@ -226,72 +251,71 @@ ggplot() +
 vic_r45_full <- c(vic_hist, vic_r45)
 vic_r85_full <- c(vic_hist, vic_r85)
 
-# estimate shape parameter with Lmoments
-vic_r45_shape_full <- terra::app(vic_r45_full, fun = fit_gev_shape, cores = 12)
-vic_r85_shape_full <- terra::app(vic_r85_full, fun = fit_gev_shape, cores = 12)
-
-
-# add the shape parameter to the end of the data
-vic_r45_w_shape_full <- c(vic_r45, vic_r45_shape_full)
-vic_r85_w_shape_full <- c(vic_r85, vic_r85_shape_full)
 
 
 # fit dist and estimate MRI (mean is varying for future scenarios)
-ECC_vic_r45_stat_nonstat_full <- terra::app(vic_r45_w_shape_full,
-  fun = rl_gev_time_data_w_shape, cores = 12
+ECC_vic_r45_mixstat_full_access13 <- terra::app(vic_r45_full,
+  fun = gev_fit_stat_nonstat, cores = 12
 )
 
-ECC_vic_r85_stat_nonstat_full <- terra::app(vic_r85_w_shape_full,
-  fun = rl_gev_time_data_w_shape, cores = 12
+ECC_vic_r85_mixstat_full_access13 <- terra::app(vic_r85_full,
+  fun = gev_fit_stat_nonstat, cores = 12
 )
 
-ECC_vic_hist_stat_nonstat_full <- terra::app(vic_hist,
-  fun = fit_gev_event, cores = 12
+ECC_vic_hist_mixstat_full_access13 <- terra::app(vic_hist,
+  fun = gev_fit_stat_nonstat, cores = 12
 )
 
 
-writeRaster(ECC_vic_r45_stat_nonstat_full,
-  "E:data-raw/dist_fit_vic/ECC_vic_r45.tif",
+writeRaster(ECC_vic_r45_mixstat_full_access13,
+  "E:data-raw/dist_fit_vic/access13/ECC_vic_r45_mixstat_full_access13.tif",
   overwrite = TRUE
 )
 
-writeRaster(ECC_vic_r85_stat_nonstat_full,
-  "E:data-raw/dist_fit_vic/ECC_vic_r85.tif",
+writeRaster(ECC_vic_r85_mixstat_full_access13,
+  "E:data-raw/dist_fit_vic/access13/ECC_vic_r85_mixstat_full_access13.tif",
   overwrite = TRUE
 )
 
-writeRaster(ECC_vic_hist_stat_nonstat_full,
-  "E:data-raw/dist_fit_vic/ECC_vic_hist.tif",
+writeRaster(ECC_vic_hist_mixstat_full_access13,
+  "E:data-raw/dist_fit_vic/access13/ECC_vic_hist_mixstat_full_access13.tif",
   overwrite = TRUE
 )
 
 
-mean_ecc_r45_stat_nonstat_full <- mean(ECC_vic_r45_stat_nonstat_full, na.rm = TRUE)
-mean_ecc_hist_stat_nonstat_full <- mean(ECC_vic_hist_stat_nonstat_full, na.rm = TRUE)
-mean_ecc_r85_stat_nonstat_full <- mean(ECC_vic_r85_stat_nonstat_full, na.rm = TRUE)
+ECC_vic_r45_mixstat_full_access13 <-
+  rast("E:data-raw/dist_fit_vic/access13/ECC_vic_r45_mixstat_full_access13.tif")
+
+ECC_vic_r85_mixstat_full_access13 <-
+  rast("E:data-raw/dist_fit_vic/access13/ECC_vic_r85_mixstat_full_access13.tif")
+
+ECC_vic_hist_mixstat_full_access13 <-
+  rast("E:data-raw/dist_fit_vic/access13/ECC_vic_hist_mixstat_full_access13.tif")
+
+mean_ecc_r45_mixstat_full_access13 <- mean(ECC_vic_r45_mixstat_full_access13, na.rm = TRUE)
+mean_ecc_hist_mixstat_full_access13 <- mean(ECC_vic_hist_mixstat_full_access13, na.rm = TRUE)
+mean_ecc_r85_mixstat_full_access13 <- mean(ECC_vic_r85_mixstat_full_access13, na.rm = TRUE)
 
 prism_mask_vic <- rast("data-raw/mask/prism_mask_vic.tif")
 
-diff_event_r45_stat_nonstat_full <- (mean_ecc_r45_stat_nonstat_full -
-  mean_ecc_hist_stat_nonstat_full) /
-  mean_ecc_hist_stat_nonstat_full
+diff_event_r45_mixstat_full_access13 <- (mean_ecc_r45_mixstat_full_access13 -
+  mean_ecc_hist_mixstat_full_access13) / mean_ecc_hist_mixstat_full_access13
 
-diff_event_r85_stat_nonstat_full <- (mean_ecc_r85_stat_nonstat_full -
-  mean_ecc_hist_stat_nonstat_full) /
-  mean_ecc_hist_stat_nonstat_full
+diff_event_r85_mixstat_full_access13 <- (mean_ecc_r85_mixstat_full_access13 -
+  mean_ecc_hist_mixstat_full_access13) / mean_ecc_hist_mixstat_full_access13
 
-diff_event_r45_stat_nonstat_full <- terra::mask(diff_event_r45_stat_nonstat_full, prism_mask_vic)
-diff_event_r85_stat_nonstat_full <- terra::mask(diff_event_r85_stat_nonstat_full, prism_mask_vic)
+diff_event_r45_mixstat_full_access13 <- terra::mask(diff_event_r45_mixstat_full_access13, prism_mask_vic)
+diff_event_r85_mixstat_full_access13 <- terra::mask(diff_event_r85_mixstat_full_access13, prism_mask_vic)
 
 ggplot() +
   geom_spatraster_contour_filled(
-    data = diff_event_r45_stat_nonstat_full,
+    data = diff_event_r45_mixstat_full_access13,
     breaks = c(-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1)
   ) +
   scale_fill_manual(
     name = "MRI Percent \n Change",
     values = c(
-      "#543005", "#8c510a", "#bf812d", "#dfc27d", "#f6e8c3",
+      "#bf812d", "#dfc27d", "#f6e8c3",
       "#c7eae5", "#80cdc1", "#35978f", "#01665e", "#003c30"
     ), na.translate = F,
     guide = guide_legend(reverse = TRUE)
@@ -299,6 +323,7 @@ ggplot() +
   geom_spatvector(data = conus, fill = NA, color = "grey40") +
   xlab("Longitude") +
   ylab("Latitude") +
+  ggtitle("ACCESS13 R45") +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(
@@ -311,13 +336,13 @@ ggplot() +
 
 ggplot() +
   geom_spatraster_contour_filled(
-    data = diff_event_r85_stat_nonstat_full,
+    data = diff_event_r85_mixstat_full_access13,
     breaks = c(-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1)
   ) +
   scale_fill_manual(
     name = "MRI Percent \n Change",
     values = c(
-      "#543005", "#8c510a", "#bf812d", "#dfc27d", "#f6e8c3",
+      "#bf812d", "#dfc27d", "#f6e8c3",
       "#c7eae5", "#80cdc1", "#35978f", "#01665e", "#003c30"
     ), na.translate = F,
     guide = guide_legend(reverse = TRUE)
@@ -325,6 +350,7 @@ ggplot() +
   geom_spatvector(data = conus, fill = NA, color = "grey40") +
   xlab("Longitude") +
   ylab("Latitude") +
+  ggtitle("ACCESS13 R85 FULL") +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(
@@ -333,4 +359,41 @@ ggplot() +
     legend.text = element_text(size = 30),
     axis.title = element_text(size = 30),
     axis.text = element_text(size = 30)
+  )
+
+
+
+
+################################################################################
+diff_r45_r85 <- c(diff_event_r45_mixstat_full_access13, diff_event_r85_mixstat_full_access13)
+names(diff_r45_r85) <- c("r45", "r85")
+
+
+ggplot() +
+  geom_spatraster_contour_filled(
+    data = diff_r45_r85,
+    breaks = c(-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1)
+  ) +
+  facet_wrap(~lyr, nrow = 2) +
+  scale_fill_manual(
+    name = "MRI Percent \n Change",
+    values = c(
+      "#bf812d", "#dfc27d", "#f6e8c3",
+      "#c7eae5", "#80cdc1", "#35978f", "#01665e", "#003c30"
+    ), na.translate = F,
+    guide = guide_legend(reverse = TRUE)
+  ) +
+  geom_spatvector(data = conus, fill = NA, color = "grey40") +
+  xlab("Longitude") +
+  ylab("Latitude") +
+  ggtitle("ACCESS13: MRI Percent Change -FULL (MS method)") +
+  theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
+  coord_sf(crs = 4326) +
+  theme(
+    # legend.position = c(0.95, 0.4),
+    legend.title = element_text(size = 30),
+    legend.text = element_text(size = 30),
+    axis.title = element_text(size = 30),
+    axis.text = element_text(size = 20),
+    strip.text = element_text(size = 30)
   )

@@ -79,6 +79,7 @@ ggplot() +
   geom_spatvector(data = conus, fill = NA, color = "grey40") +
   xlab("Longitude") +
   ylab("Latitude") +
+  ggtitle("ACCESS10: Stationarity Plot") +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(
@@ -128,6 +129,10 @@ writeRaster(ECC_vic_hist_mixstat,
   "E:data-raw/dist_fit_vic/ECC_vic_hist_mixstat.tif",
   overwrite = TRUE
 )
+
+ECC_vic_r45_mixstat <- rast("E:data-raw/dist_fit_vic/access10/ECC_vic_r45_mixstat.tif")
+ECC_vic_r85_mixstat <- rast("E:data-raw/dist_fit_vic/access10/ECC_vic_r85_mixstat.tif")
+ECC_vic_hist_mixstat <- rast("E:data-raw/dist_fit_vic/access10/ECC_vic_hist_mixstat.tif")
 
 
 mean_ecc_r45_mixstat <- mean(ECC_vic_r45_mixstat, na.rm = TRUE)
@@ -196,8 +201,39 @@ ggplot() +
     axis.text = element_text(size = 30)
   )
 
+################################################################################
+diff_r45_r85 <- c(diff_event_r45_mixstat, diff_event_r85_mixstat)
+names(diff_r45_r85) <- c("r45", "r85")
 
 
+ggplot() +
+  geom_spatraster_contour_filled(
+    data = diff_r45_r85,
+    breaks = c(-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1)
+  ) +
+  facet_wrap(~lyr, nrow = 2) +
+  scale_fill_manual(
+    name = "MRI Percent \n Change",
+    values = c(
+      "#543005", "#8c510a", "#bf812d", "#dfc27d", "#f6e8c3",
+      "#c7eae5", "#80cdc1", "#35978f", "#01665e", "#003c30"
+    ), na.translate = F,
+    guide = guide_legend(reverse = TRUE)
+  ) +
+  geom_spatvector(data = conus, fill = NA, color = "grey40") +
+  xlab("Longitude") +
+  ylab("Latitude") +
+  ggtitle("ACCESS10: MRI Percent Change (MS method)") +
+  theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
+  coord_sf(crs = 4326) +
+  theme(
+    # legend.position = c(0.95, 0.4),
+    legend.title = element_text(size = 30),
+    legend.text = element_text(size = 30),
+    axis.title = element_text(size = 30),
+    axis.text = element_text(size = 20),
+    strip.text = element_text(size = 30)
+  )
 
 
 ################################################################################
@@ -238,6 +274,11 @@ writeRaster(ECC_vic_hist_mixstat_full,
 )
 
 
+ECC_vic_r45_mixstat_full <- rast("E:data-raw/dist_fit_vic/access10/ECC_vic_r45_mixstat_full.tif")
+ECC_vic_r85_mixstat_full <- rast("E:data-raw/dist_fit_vic/access10/ECC_vic_r85_mixstat_full.tif")
+ECC_vic_hist_mixstat_full <- rast("E:data-raw/dist_fit_vic/access10/ECC_vic_hist_mixstat_full.tif")
+
+
 mean_ecc_r45_mixstat_full <- mean(ECC_vic_r45_mixstat_full, na.rm = TRUE)
 mean_ecc_hist_mixstat_full <- mean(ECC_vic_hist_mixstat_full, na.rm = TRUE)
 mean_ecc_r85_mixstat_full <- mean(ECC_vic_r85_mixstat_full, na.rm = TRUE)
@@ -261,7 +302,7 @@ ggplot() +
   scale_fill_manual(
     name = "MRI Percent \n Change",
     values = c(
-       "#bf812d", "#dfc27d", "#f6e8c3",
+      "#bf812d", "#dfc27d", "#f6e8c3",
       "#c7eae5", "#80cdc1", "#35978f", "#01665e", "#003c30"
     ), na.translate = F,
     guide = guide_legend(reverse = TRUE)
@@ -272,7 +313,8 @@ ggplot() +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(
-    legend.position = c(0.91, 0.28),
+    #legend.position = c(0.91, 0.28),
+    legend.position = "none",
     legend.title = element_text(size = 30),
     legend.text = element_text(size = 30),
     axis.title = element_text(size = 30),
@@ -287,7 +329,7 @@ ggplot() +
   scale_fill_manual(
     name = "MRI Percent \n Change",
     values = c(
-       "#bf812d", "#dfc27d", "#f6e8c3",
+      "#bf812d", "#dfc27d", "#f6e8c3",
       "#c7eae5", "#80cdc1", "#35978f", "#01665e", "#003c30"
     ), na.translate = F,
     guide = guide_legend(reverse = TRUE)
@@ -298,9 +340,46 @@ ggplot() +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(
-    legend.position = c(0.91, 0.28),
+    #legend.position = c(0.91, 0.28),
+    legend.position = "none",
     legend.title = element_text(size = 30),
     legend.text = element_text(size = 30),
     axis.title = element_text(size = 30),
     axis.text = element_text(size = 30)
+  )
+
+
+
+################################################################################
+diff_r45_r85_full <- c(diff_event_r45_mixstat_full, diff_event_r85_mixstat_full)
+names(diff_r45_r85_full) <- c("r45", "r85")
+
+
+ggplot() +
+  geom_spatraster_contour_filled(
+    data = diff_r45_r85_full,
+    breaks = c(-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1)
+  ) +
+  facet_wrap(~lyr, nrow = 2) +
+  scale_fill_manual(
+    name = "MRI Percent \n Change",
+    values = c(
+      "#bf812d", "#dfc27d", "#f6e8c3",
+      "#c7eae5", "#80cdc1", "#35978f", "#01665e", "#003c30"
+    ), na.translate = F,
+    guide = guide_legend(reverse = TRUE)
+  ) +
+  geom_spatvector(data = conus, fill = NA, color = "grey40") +
+  xlab("Longitude") +
+  ylab("Latitude") +
+  ggtitle("ACCESS10: MRI Percent Change -FULL (MS method)") +
+  theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
+  coord_sf(crs = 4326) +
+  theme(
+    # legend.position = c(0.95, 0.4),
+    legend.title = element_text(size = 30),
+    legend.text = element_text(size = 30),
+    axis.title = element_text(size = 30),
+    axis.text = element_text(size = 20),
+    strip.text = element_text(size = 30)
   )
