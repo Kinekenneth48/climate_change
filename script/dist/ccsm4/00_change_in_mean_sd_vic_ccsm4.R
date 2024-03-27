@@ -7,7 +7,7 @@
 # ============================================================================#
 pacman::p_load(
   fitdistrplus, terra, extRemes, evd,
-  ismev, trend
+  ismev, trend, tidyverse, tidyterra
 )
 
 
@@ -20,9 +20,9 @@ set.seed(275349)
 # load the data
 # ============================================================================#
 
-vic_hist <- terra::rast("E:/data-raw/NCAR/ACCESS1-0/historical/max_swe_vic_hist_access10.tif")
-r45 <- terra::rast("E:/data-raw/NCAR/ACCESS1-0/future/max_swe_vic_rcp45_access10.tif")
-r85 <- terra::rast("E:/data-raw/NCAR/ACCESS1-0/future/max_swe_vic_rcp85_access10.tif")
+vic_hist <- terra::rast("E:/data-raw/NCAR/CCSM4/historical/max_swe_vic_hist_CCSM4.tif")
+r45 <- terra::rast("E:/data-raw/NCAR/CCSM4/future/max_swe_vic_rcp45_CCSM4.tif")
+r85 <- terra::rast("E:/data-raw/NCAR/CCSM4/future/max_swe_vic_rcp85_CCSM4.tif")
 
 
 # ==============================================================================
@@ -44,8 +44,8 @@ hist_sd <- stdev(vic_hist, na.rm = TRUE)
 r45_mean <- mean(r45, na.rm = TRUE)
 r85_mean <- mean(r85, na.rm = TRUE)
 
-r45_sd <- mean(r45, na.rm = TRUE)
-r85_sd <- mean(r85, na.rm = TRUE)
+r45_sd <- stdev(r45, na.rm = TRUE)
+r85_sd <- stdev(r85, na.rm = TRUE)
 
 r45_mean_diff <- r45_mean - hist_mean
 r85_mean_diff <- r85_mean - hist_mean
@@ -62,16 +62,6 @@ r85_mean_diff <- terra::mask(r85_mean_diff, prism_mask_vic)
 r45_sd_diff <- terra::mask(r45_sd_diff, prism_mask_vic)
 r85_sd_diff <- terra::mask(r85_sd_diff, prism_mask_vic)
 
-
-par(mfcol = c(1, 2), mar = c(5, 4, 4, 5) + 0.1)
-plot(r45_mean_diff, breaks = c(-1000, -250, -50, -25, 0, 25, 50, 250, 1000))
-plot(r45_sd_diff, breaks = c(-100, -50, -25, 0, 25, 50, 250, 600))
-par(mfrow = c(1, 1))
-
-plot(r45_mean_diff, breaks = c(-1000, -250, -50, -25, 0, 25, 50, 250, 1000))
-plot(r45_sd_diff, breaks = c(-100, -50, -25, 0, 25, 50, 250, 600))
-plot(r85_mean_diff, breaks = c(-1000, -250, -50, -25, 0, 25, 50, 250, 1000))
-plot(r85_sd_diff, breaks = c(-100, -50, -25, 0, 25, 50, 250, 600))
 
 #=============================================================================#
 # RCP45
@@ -93,6 +83,7 @@ ggplot() +
   geom_spatvector(data = conus, fill = NA, color = "grey40") +
   xlab("Longitude") +
   ylab("Latitude") +
+  ggtitle('CCSM4: RCP45 MEAN CHANGE') +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(
@@ -111,7 +102,7 @@ ggplot() +
   scale_fill_manual(
     name = "SD Change",
     values = c(
-       "#bf812d", "#dfc27d", "#f6e8c3",
+      "#bf812d", "#dfc27d", "#f6e8c3",
       "#c7eae5", "#80cdc1", "#35978f", "#01665e"
     ), na.translate = F,
     guide = guide_legend(reverse = TRUE)
@@ -119,6 +110,7 @@ ggplot() +
   geom_spatvector(data = conus, fill = NA, color = "grey40") +
   xlab("Longitude") +
   ylab("Latitude") +
+  ggtitle('CCSM4: RCP45 SD CHANGE') +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(
@@ -150,6 +142,7 @@ ggplot() +
   geom_spatvector(data = conus, fill = NA, color = "grey40") +
   xlab("Longitude") +
   ylab("Latitude") +
+  ggtitle('CCSM4: RCP85 MEAN CHANGE') +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(
@@ -168,7 +161,7 @@ ggplot() +
   scale_fill_manual(
     name = "SD Change",
     values = c(
-      "#bf812d", "#dfc27d", "#f6e8c3",
+      "#8c510a", "#bf812d", "#dfc27d", "#f6e8c3",
       "#c7eae5", "#80cdc1", "#35978f", "#01665e"
     ), na.translate = F,
     guide = guide_legend(reverse = TRUE)
@@ -176,6 +169,7 @@ ggplot() +
   geom_spatvector(data = conus, fill = NA, color = "grey40") +
   xlab("Longitude") +
   ylab("Latitude") +
+  ggtitle('CCSM4: RCP85 SD CHANGE') +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(

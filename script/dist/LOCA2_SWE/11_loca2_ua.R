@@ -105,12 +105,13 @@ ggplot() +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(
-   # legend.position = c(0.9, 0.23),
     legend.title = element_text(size = 30),
     legend.text = element_text(size = 30),
     axis.title = element_text(size = 30),
-    axis.text = element_text(size = 25)
+    axis.text = element_text(size = 25),
+    strip.text = element_text(size = 30, face = "bold") # Increase size of facet titles and make them bold
   )
+
 
 
 par(mfcol = c(2, 2), mar = c(5, 4, 4, 5) + 0.1)
@@ -139,6 +140,17 @@ plot(diff_hist[[33]],
      legend = FALSE
 )
 par(mfrow = c(1, 1))
+
+
+
+
+
+
+
+
+
+
+
 
 
 ################################################################################

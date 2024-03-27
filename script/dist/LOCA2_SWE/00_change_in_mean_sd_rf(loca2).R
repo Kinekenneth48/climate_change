@@ -7,7 +7,7 @@
 # ============================================================================#
 pacman::p_load(
   fitdistrplus, terra, extRemes, evd,
-  ismev, trend, tidyterra, scales, geodata
+  ismev, trend, tidyterra, scales, geodata, tidyverse
 )
 
 
