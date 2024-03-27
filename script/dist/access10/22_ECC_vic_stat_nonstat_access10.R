@@ -350,8 +350,8 @@ ggplot() +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(
-    #legend.position = c(0.91, 0.28),
-    legend.position = "none",
+    legend.position = c(0.91, 0.28),
+   # legend.position = "none",
     legend.title = element_text(size = 30),
     legend.text = element_text(size = 30),
     axis.title = element_text(size = 30),
@@ -377,8 +377,8 @@ ggplot() +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(
-    #legend.position = c(0.91, 0.28),
-    legend.position = "none",
+    legend.position = c(0.91, 0.28),
+    #legend.position = "none",
     legend.title = element_text(size = 30),
     legend.text = element_text(size = 30),
     axis.title = element_text(size = 30),

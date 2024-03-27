@@ -113,8 +113,6 @@ summary(r85_gridpoint_future)
 fit_gev_event(r85_gridpoint_hist)
 fit_gev_event(r85_gridpoint_future)
 
-
-
 ## ==========================================================================###
 
 # Open the PDF device
@@ -314,3 +312,110 @@ for (i in 1:10) {
 
 # Close the PDF device
 dev.off()
+
+
+
+
+## ==========================================================================###
+
+library(dplyr)
+library(ggplot2)
+
+tr_h_85 = as.data.frame(t(hist_r85 )) %>%
+  mutate(year = 1951:2005 )
+
+
+tr_f_85 = as.data.frame(t(future_points_r85 )) %>%
+  mutate(year = 2006:2100 )
+
+data85 = rbind(tr_h_85,tr_f_85 )
+
+# Convert to long format
+df_long <- data85 %>%
+  pivot_longer(cols = V1:V4, names_to = "Series", values_to = "SWE")
+
+df_long_adjusted <- df_long %>%
+  mutate(Series = case_when(
+    Series == "V1" ~ "Location 1",
+    Series == "V2" ~ "Location 2",
+    Series == "V3" ~ "Location 3",
+    Series == "V4" ~ "Location 4",
+    TRUE ~ Series # Default case, if needed
+  ))
+
+
+
+# Assuming df_long is your long-format dataframe ready for plotting
+# Make sure it contains 'year', 'Series', and 'Value' columns
+
+ggplot(df_long_adjusted, aes(x = year, y = SWE, group = Series)) + 
+  geom_line() + # Draw the lines for each series
+  geom_point(size = 1 , colour = "black")+
+  facet_wrap(~Series) + # Create separate panels for each series
+  geom_vline(xintercept = 2006, color = "red", linetype = "dashed") + # Add the red line at 2006
+  theme_minimal() + # Use a minimal theme for a cleaner look
+  labs(title = "Multiple Time Series with Facets", x = "Year", y = "SWE") +
+  theme(
+    legend.position = "none",
+    strip.text = element_text(size = 30), # Increase the size of the facet labels
+    legend.title = element_blank(), # Assuming you want to hide the legend title
+    legend.text = element_text(size = 30),
+    axis.title = element_text(size = 30),
+    axis.text = element_text(size = 30),
+    panel.spacing = unit(2, "lines") # Adjust space between panels
+  )
+
+
+## ==========================================================================###
+
+library(dplyr)
+library(ggplot2)
+
+tr_h_45 = as.data.frame(t(hist_r45 )) %>%
+  mutate(year = 1951:2005 )
+
+
+tr_f_45 = as.data.frame(t(future_points_r45 )) %>%
+  mutate(year = 2006:2100 )
+
+data45 = rbind(tr_h_45,tr_f_45 )
+
+# Convert to long format
+df_long <- data45 %>%
+  pivot_longer(cols = V1:V4, names_to = "Series", values_to = "SWE")
+
+df_long_adjusted <- df_long %>%
+  mutate(Series = case_when(
+    Series == "V1" ~ "Location 1",
+    Series == "V2" ~ "Location 2",
+    Series == "V3" ~ "Location 3",
+    Series == "V4" ~ "Location 4",
+    TRUE ~ Series # Default case, if needed
+  ))
+
+
+
+# Assuming df_long is your long-format dataframe ready for plotting
+# Make sure it contains 'year', 'Series', and 'Value' columns
+
+ggplot(df_long_adjusted, aes(x = year, y = SWE, group = Series)) + 
+  geom_line() + # Draw the lines for each series
+  geom_point(size = 1 , colour = "black") +
+  facet_wrap(~Series) + # Create separate panels for each series
+  geom_vline(xintercept = 2006, color = "red", linetype = "dashed") + # Add the red line at 2006
+  theme_minimal() + # Use a minimal theme for a cleaner look
+  labs(title = "Multiple Time Series with Facets", x = "Year", y = "SWE") +
+  theme(
+    legend.position = "none",
+    strip.text = element_text(size = 30), # Increase the size of the facet labels
+    legend.title = element_blank(), # Assuming you want to hide the legend title
+    legend.text = element_text(size = 30),
+    axis.title = element_text(size = 30),
+    axis.text = element_text(size = 30),
+    panel.spacing = unit(2, "lines") # Adjust space between panels
+  )
+
+
+
+
+

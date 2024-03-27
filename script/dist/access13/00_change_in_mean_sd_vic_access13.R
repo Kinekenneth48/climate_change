@@ -44,8 +44,8 @@ hist_sd <- stdev(vic_hist, na.rm = TRUE)
 r45_mean <- mean(r45, na.rm = TRUE)
 r85_mean <- mean(r85, na.rm = TRUE)
 
-r45_sd <- mean(r45, na.rm = TRUE)
-r85_sd <- mean(r85, na.rm = TRUE)
+r45_sd <- stdev(r45, na.rm = TRUE)
+r85_sd <- stdev(r85, na.rm = TRUE)
 
 r45_mean_diff <- r45_mean - hist_mean
 r85_mean_diff <- r85_mean - hist_mean

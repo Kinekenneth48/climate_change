@@ -44,8 +44,8 @@ hist_sd <- stdev(vic_hist, na.rm = TRUE)
 r45_mean <- mean(r45, na.rm = TRUE)
 r85_mean <- mean(r85, na.rm = TRUE)
 
-r45_sd <- mean(r45, na.rm = TRUE)
-r85_sd <- mean(r85, na.rm = TRUE)
+r45_sd <- stdev(r45, na.rm = TRUE)
+r85_sd <- stdev(r85, na.rm = TRUE)
 
 r45_mean_diff <- r45_mean - hist_mean
 r85_mean_diff <- r85_mean - hist_mean
@@ -112,7 +112,7 @@ ggplot() +
   scale_fill_manual(
     name = "SD Change",
     values = c(
-       "#bf812d", "#dfc27d", "#f6e8c3",
+      "#8c510a", "#bf812d", "#dfc27d", "#f6e8c3",
       "#c7eae5", "#80cdc1", "#35978f", "#01665e"
     ), na.translate = F,
     guide = guide_legend(reverse = TRUE)
@@ -171,7 +171,7 @@ ggplot() +
   scale_fill_manual(
     name = "SD Change",
     values = c(
-      "#bf812d", "#dfc27d", "#f6e8c3",
+     "#8c510a", "#bf812d", "#dfc27d", "#f6e8c3",
       "#c7eae5", "#80cdc1", "#35978f", "#01665e"
     ), na.translate = F,
     guide = guide_legend(reverse = TRUE)
@@ -179,7 +179,7 @@ ggplot() +
   geom_spatvector(data = conus, fill = NA, color = "grey40") +
   xlab("Longitude") +
   ylab("Latitude") +
-  ggtitle('ACCESS10: RCP45 SD CHANGE') +
+  ggtitle('ACCESS10: RCP85 SD CHANGE') +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(
