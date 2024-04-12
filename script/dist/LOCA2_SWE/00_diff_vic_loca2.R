@@ -30,20 +30,20 @@ conus <- terra::vect(conus)
 # ============================================================================#
 
 loca2_swe_hist <- rast(list.files("E:/data-raw/swe_model_vars/ssp585/hist/prediction/rf/",
-                       pattern = "\\.tif$", full.names = TRUE
+  pattern = "\\.tif$", full.names = TRUE
 ))
 
 
 loca2_swe_r1 <- rast(list.files("E:/data-raw/swe_model_vars/ssp585/r1/prediction/rf/",
-                     pattern = "\\.tif$", full.names = TRUE
+  pattern = "\\.tif$", full.names = TRUE
 ))
 
 loca2_swe_r2 <- rast(list.files("E:/data-raw/swe_model_vars/ssp585/r2/prediction/rf/",
-                     pattern = "\\.tif$", full.names = TRUE
+  pattern = "\\.tif$", full.names = TRUE
 ))
 
 loca2_swe_r3 <- rast(list.files("E:/data-raw/swe_model_vars/ssp585/r3/prediction/rf/",
-                     pattern = "\\.tif$", full.names = TRUE
+  pattern = "\\.tif$", full.names = TRUE
 ))
 
 
@@ -58,26 +58,26 @@ vic_swe_r85 <- terra::rast("E:/data-raw/NCAR/ACCESS1-0/future/max_swe_vic_rcp85_
 # ============================================================================#
 # HINDCAST
 # ============================================================================#
-loca2_swe_hist =subset(loca2_swe_hist, time(loca2_swe_hist) %in% time(vic_swe_hist))
+loca2_swe_hist <- subset(loca2_swe_hist, time(loca2_swe_hist) %in% time(vic_swe_hist))
 
-loca2_swe_hist = project(loca2_swe_hist, vic_swe_hist[[1]] )
+loca2_swe_hist <- project(loca2_swe_hist, vic_swe_hist[[1]])
 
 
-diff_hist = vic_swe_hist - loca2_swe_hist
-mean_diff_hist = mean(diff_hist, na.rm =TRUE)
+diff_hist <- vic_swe_hist - loca2_swe_hist
+mean_diff_hist <- mean(diff_hist, na.rm = TRUE)
 
 # ============================================================================#
 # FUTURE
 # ============================================================================#
-loca2_swe_future =mean(loca2_swe_r1, loca2_swe_r2, loca2_swe_r3)
+loca2_swe_future <- mean(loca2_swe_r1, loca2_swe_r2, loca2_swe_r3)
 
-loca2_swe_future =subset(loca2_swe_future, time(loca2_swe_future) %in% time(vic_swe_r85))
-vic_swe_r85 =subset(vic_swe_r85, time(vic_swe_r85) %in% time(loca2_swe_future))
+loca2_swe_future <- subset(loca2_swe_future, time(loca2_swe_future) %in% time(vic_swe_r85))
+vic_swe_r85 <- subset(vic_swe_r85, time(vic_swe_r85) %in% time(loca2_swe_future))
 
-loca2_swe_future = project(loca2_swe_future, vic_swe_r85[[1]] )
+loca2_swe_future <- project(loca2_swe_future, vic_swe_r85[[1]])
 
-diff_future = vic_swe_r85 - loca2_swe_future
-mean_diff_future = mean(diff_future, na.rm =TRUE)
+diff_future <- vic_swe_r85 - loca2_swe_future
+mean_diff_future <- mean(diff_future, na.rm = TRUE)
 
 
 
@@ -101,7 +101,7 @@ ggplot() +
   geom_spatvector(data = conus, fill = NA, color = "grey40") +
   xlab("Longitude") +
   ylab("Latitude") +
-  ggtitle('HIST MEAN DIFF: ACCESS10 VS LOCA2 SWE') +
+  ggtitle("HIST MEAN DIFF: ACCESS10 VS LOCA2 SWE") +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(
@@ -130,7 +130,7 @@ ggplot() +
   geom_spatvector(data = conus, fill = NA, color = "grey40") +
   xlab("Longitude") +
   ylab("Latitude") +
-  ggtitle('FUTURE MEAN DIFF: ACCESS10 VS LOCA2 SWE') +
+  ggtitle("FUTURE MEAN DIFF: ACCESS10 VS LOCA2 SWE") +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(
