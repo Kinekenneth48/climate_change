@@ -24,7 +24,12 @@ vic_hist <- terra::rast("E:/data-raw/NCAR/ACCESS1-0/historical/max_swe_vic_hist_
 r45 <- terra::rast("E:/data-raw/NCAR/ACCESS1-0/future/max_swe_vic_rcp45_access10.tif")
 r85 <- terra::rast("E:/data-raw/NCAR/ACCESS1-0/future/max_swe_vic_rcp85_access10.tif")
 
-
+# vic_swe_access10_median = median(vic_hist, na.rm =TRUE)
+# vic_swe_access10_median <- terra::mask(vic_swe_access10_median, prism_mask_vic)
+# 
+# terra::writeRaster(vic_swe_access10_median,
+#                    filename = "E:/data-raw/vic_swe_access10_median.tif",
+#                    overwrite = TRUE)
 # ==============================================================================
 # get USA map with state boundaries
 # ==============================================================================

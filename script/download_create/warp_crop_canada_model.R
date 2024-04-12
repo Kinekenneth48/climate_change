@@ -8,6 +8,7 @@
 library(sf)
 library(fs) # For file and directory operations
 library(tools)
+library(terra)
 
 
 # manage memory usage so PC doesn't crash
@@ -15,21 +16,27 @@ terraOptions(memfrac = 0.80, verbose = TRUE)
 
 prism_mask_canada <- rast("data-raw/mask/prism_mask_canada.tif")
 prism <- terra::rast("E:/data-raw/prism/raster/prism_day_ppt_raster.tif")[[1]]
+
 # ============================================================================#
 # create a mask
 # ============================================================================#
-# prism <- terra::rast("E:/data-raw/prism/raster/prism_day_ppt_raster.tif")[[1]]
-# data_crop = crop(data, ext(prism[[1]]))
-#
-# prism_mask_canada <- terra::project(prism, data_crop[[1]])
-#
-#
-# #rf_pred_raster <- terra::mask(data_crop, prism_mask_canada)
-#
-# writeRaster(prism_mask_canada,
-#             "data-raw/mask/prism_mask_canada.tif",
-#             overwrite = TRUE
-# )
+data = rast("D:/data-raw/canada_model/snw/warp/NAM-44_CCCma-CanESM2_historical-r1/r1i1p1/snw_NAM-44_CCCma-CanESM2_historical-r1_r1i1p1_CCCma-CanRCM4_r2_mon_195001-195012_warped.nc")
+prism <- terra::rast("E:/data-raw/prism/raster/prism_day_ppt_raster.tif")[[1]]
+
+ext <- c(-126, -66, 23.375, 54)
+data_crop = crop(data, ext)
+
+prism_mask_canada <- terra::project(prism, data_crop[[1]])
+
+# plot(prism_mask_canada)
+# plot(conus, add=TRUE)
+# 
+# rf_pred_raster <- terra::mask(data_crop, prism_mask_canada)
+
+writeRaster(prism_mask_canada,
+            "data-raw/mask/prism_mask_canada.tif",
+            overwrite = TRUE
+)
 
 
 ################################################################################
@@ -55,7 +62,8 @@ mask_nc_files_in_subdir <- function(source_subdir, dest_subdir) {
     time_raster = rast(time_file_path)
     
     crs(raster) <- "EPSG:4326"
-    raster_crop <- crop(raster, ext(prism[[1]]))
+    #raster_crop <- crop(raster, ext(prism[[1]]))
+    raster_crop <- crop(raster, ext)
     time(raster_crop) = time(time_raster)
     
     raster_mask <- terra::mask(raster_crop, prism_mask_canada)
@@ -93,7 +101,8 @@ for (subdir in subdirs_r1) {
   mask_nc_files_in_subdir(subdir, new_dest_subdir)
 }
 
-
+#r =rast("D:/data-raw/canada_model/snw/warp_mask/NAM-44_CCCma-CanESM2_historical-r1/r10i2p1/snw_NAM-44_CCCma-CanESM2_historical-r1_r10i2p1_CCCma-CanRCM4_r2_mon_195001-195012_warped_mask.tif")
+#rr =rast("D:/data-raw/canada_model/snw/NAM-44_CCCma-CanESM2_historical-r1/r10i2p1/snw_NAM-44_CCCma-CanESM2_historical-r1_r10i2p1_CCCma-CanRCM4_r2_mon_195001-195012.nc")
 
 # ============================================================================#
 #  R2

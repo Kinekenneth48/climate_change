@@ -1,0 +1,3 @@
+nohup: ignoring input
+[0;1;31mSystem has not been booted with systemd as init system (PID 1). Can't operate.[0m
+[0;1;31mFailed to connect to bus: Host is down[0m

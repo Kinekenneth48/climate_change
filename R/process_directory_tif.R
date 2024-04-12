@@ -2,15 +2,15 @@
 # Function to process each directory
 process_directory_tif <- function(dir_path) {
   # List .tif files in the directory
-  nc_files <- list.files(dir_path, pattern = "\\.tif$", full.names = TRUE)
+  tif_files <- list.files(dir_path, pattern = "\\.tif$", full.names = TRUE)
   
   # Initialize an empty list to store raster layers
   raster_layers <- list()
   
   # Loop over each file, convert to raster, and add to the list
-  for (nc_file in nc_files) {
+  for (tif_file in tif_files) {
     # Read the NetCDF file as a SpatRaster
-    r <- terra::rast(nc_file)
+    r <- terra::rast(tif_file)
     
     # Assuming you want all layers, otherwise, you might need to select specific layers
     raster_layers[[length(raster_layers) + 1]] <- r

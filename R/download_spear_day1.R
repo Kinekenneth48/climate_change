@@ -1,30 +1,29 @@
 download_spear_day <- function(directory = ".", var = "tas",
                                scenario = c("historical", "future")) {
-  # Increase timeout to 10 mins
-  options(timeout = max(600, getOption("timeout")))
-
+ pacman::p_load(curl)
+  
   # Validate the variable
   available_vars <- c("tas", "tasmin", "tasmax", "pr", "psl", "uas", "vas")
   if (!var %in% available_vars) {
     stop("The 'var' parameter is not an available variable to download.")
   }
-
+  
   # Create root download directory
   download_dir <- ifelse(directory == ".", getwd(), directory)
   download_dir <- paste0(path.expand(gsub(download_dir,
-    pattern = "/$",
-    replacement = ""
+                                          pattern = "/$",
+                                          replacement = ""
   )), "/spear")
-
+  
   # Initialize list to store failed downloads
   failed_downloads <- vector("character", 0)
-
+  
   # Base URLs for each scenario
   base_url <- list(
     historical = "https://noaa-gfdl-spear-large-ensembles-pds.s3.amazonaws.com/SPEAR/GFDL-LARGE-ENSEMBLES/CMIP/NOAA-GFDL/GFDL-SPEAR-MED/historical/",
     future = "https://noaa-gfdl-spear-large-ensembles-pds.s3.amazonaws.com/SPEAR/GFDL-LARGE-ENSEMBLES/CMIP/NOAA-GFDL/GFDL-SPEAR-MED/scenarioSSP5-85/"
   )
-
+  
   # Time periods for each scenario
   time_periods <- list(
     historical = c(
@@ -42,7 +41,7 @@ download_spear_day <- function(directory = ".", var = "tas",
       "20910101-21001231"
     )
   )
-
+  
   # Download function
   download_files <- function(base, periods, phase) {
     if (phase == "scenarioSSP5-85") {
@@ -56,30 +55,25 @@ download_spear_day <- function(directory = ".", var = "tas",
         dir.create(scenario_dir, recursive = TRUE)
       }
     }
-
-
+    
+    url =vector()
+    dest = vector()
     for (r in 1:30) {
       for (period in periods) {
-        url <- paste0(
+        i = 1+ length(url)
+        url[i] <- paste0(
           base, "r", r, "i1p1f1/day/", var, "/gr3/v20210201/",
           var, "_day_GFDL-SPEAR-MED_", phase, "_r", r,
           "i1p1f1_gr3_", period, ".nc"
         )
-        dest <- paste0(scenario_dir, "/", basename(url))
-        tryCatch(
-          {
-            utils::download.file(url = url, destfile = dest, mode="wb")
-            message(paste("Successfully downloaded: ", url))
-          },
-          error = function(e) {
-            message(paste("Failed to download: ", url))
-            failed_downloads <<- c(failed_downloads, url)
-          }
-        )
+        dest[i] <- paste0(scenario_dir, "/", basename(url[i]))
+      
       }
     }
+    
+   multi_download(urls = url, destfiles =dest, resume = TRUE)
   }
-
+  
   # Loop over specified scenarios
   for (s in scenario) {
     if (s == "future") {
@@ -88,19 +82,5 @@ download_spear_day <- function(directory = ".", var = "tas",
       download_files(base_url[[s]], time_periods[[s]], s)
     }
   }
-
-  message("All daily files are downloaded.")
-
-  # Print the list of failed downloads
-  if (length(failed_downloads) > 0) {
-    message("The following files failed to download:")
-    for (url in failed_downloads) {
-      message(url)
-    }
-  }
 }
 
-# Example usage
-# download_spear_day(directory = "./data", var = "tas", scenario = "historical")
-# download_spear_day(directory = "./data", var = "tas", scenario = "future")
-# download_spear_day(directory = "./data", var = "tas", scenario = c("historical", "future"))

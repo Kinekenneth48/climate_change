@@ -16,10 +16,6 @@ terraOptions(memfrac = 0.80, verbose = TRUE)
 
 set.seed(275349)
 
-# us <- geodata::gadm(country = "USA", level = 1, resolution = 2,
-#            path = "data-raw/maps/") #Get the County Shapefile for the US
-
-
 # ==============================================================================
 # get USA map with state boundaries
 # ==============================================================================
@@ -33,80 +29,65 @@ conus <- terra::vect(conus)
 # load the data
 # ============================================================================#
 
-# Load the dataset from the RDS file
-# us <- readRDS("data-raw/maps/gadm/gadm41_USA_1_pk_low.rds")
-# conus <- subset(us, us$NAME_1 != "Alaska" & us$NAME_1 != "Hawaii")
-
-tif_hist <- list.files("E:/data-raw/swe_model_vars/ssp585/hist/prediction/rf/",
-  pattern = "\\.tif$", full.names = TRUE
-)
+loca2_swe_hist <- rast(list.files("E:/data-raw/swe_model_vars/ssp585/hist/prediction/rf/",
+                       pattern = "\\.tif$", full.names = TRUE
+))
 
 
-tif_r1 <- list.files("E:/data-raw/swe_model_vars/ssp585/r1/prediction/rf/",
-  pattern = "\\.tif$", full.names = TRUE
-)
+loca2_swe_r1 <- rast(list.files("E:/data-raw/swe_model_vars/ssp585/r1/prediction/rf/",
+                     pattern = "\\.tif$", full.names = TRUE
+))
 
-tif_r2 <- list.files("E:/data-raw/swe_model_vars/ssp585/r2/prediction/rf/",
-  pattern = "\\.tif$", full.names = TRUE
-)
+loca2_swe_r2 <- rast(list.files("E:/data-raw/swe_model_vars/ssp585/r2/prediction/rf/",
+                     pattern = "\\.tif$", full.names = TRUE
+))
 
-tif_r3 <- list.files("E:/data-raw/swe_model_vars/ssp585/r3/prediction/rf/",
-  pattern = "\\.tif$", full.names = TRUE
-)
-
-ssp585_hist_swe <- terra::rast(tif_hist)
-ssp585_r1_swe <- terra::rast(tif_r1)
-ssp585_r2_swe <- terra::rast(tif_r2)
-ssp585_r3_swe <- terra::rast(tif_r3)
+loca2_swe_r3 <- rast(list.files("E:/data-raw/swe_model_vars/ssp585/r3/prediction/rf/",
+                     pattern = "\\.tif$", full.names = TRUE
+))
 
 
-# loca2_swe_median = median(ssp585_hist_swe, na.rm =TRUE)
-# terra::writeRaster(loca2_swe_median,
-#                    filename = "E:/data-raw/loca2_swe_median.tif",
-#                    overwrite = TRUE)
+vic_swe_hist <- terra::rast("E:/data-raw/NCAR/ACCESS1-0/historical/max_swe_vic_hist_access10.tif")
+vic_swe_r85 <- terra::rast("E:/data-raw/NCAR/ACCESS1-0/future/max_swe_vic_rcp85_access10.tif")
 
 
 ################################################################################
-## STEP 1: r1
+## STEP 1: CLEAN DATA FoOR PLOTTING
 ################################################################################
 
-hist_mean <- mean(ssp585_hist_swe, na.rm = TRUE)
-hist_sd <- stdev(ssp585_hist_swe, na.rm = TRUE)
+# ============================================================================#
+# HINDCAST
+# ============================================================================#
+loca2_swe_hist =subset(loca2_swe_hist, time(loca2_swe_hist) %in% time(vic_swe_hist))
 
-r1_mean <- mean(ssp585_r1_swe, na.rm = TRUE)
-r2_mean <- mean(ssp585_r2_swe, na.rm = TRUE)
-r3_mean <- mean(ssp585_r3_swe, na.rm = TRUE)
-
-r1_sd <- stdev(ssp585_r1_swe, na.rm = TRUE)
-r2_sd <- stdev(ssp585_r2_swe, na.rm = TRUE)
-r3_sd <- stdev(ssp585_r3_swe, na.rm = TRUE)
-
-r1_mean_diff <- r1_mean - hist_mean
-r2_mean_diff <- r2_mean - hist_mean
-r3_mean_diff <- r3_mean - hist_mean
-
-r1_sd_diff <- r1_sd - hist_sd
-r2_sd_diff <- r2_sd - hist_sd
-r3_sd_diff <- r3_sd - hist_sd
+loca2_swe_hist = project(loca2_swe_hist, vic_swe_hist[[1]] )
 
 
-r_mean_diff <- mean(r1_mean_diff, r2_mean_diff, r3_mean_diff)
-r_sd_diff <- mean(r1_sd_diff, r2_sd_diff, r3_sd_diff)
+diff_hist = vic_swe_hist - loca2_swe_hist
+mean_diff_hist = mean(diff_hist, na.rm =TRUE)
 
+# ============================================================================#
+# FUTURE
+# ============================================================================#
+loca2_swe_future =mean(loca2_swe_r1, loca2_swe_r2, loca2_swe_r3)
 
-par(mfcol = c(1, 2), mar = c(5, 4, 4, 5) + 0.1)
-plot(r_mean_diff, breaks = c(-1000, -250, -50, -25, 0, 25, 50, 250, 1000))
-plot(r_sd_diff, breaks = c(-100, -50, -25, 0, 25, 50, 250, 600))
-par(mfrow = c(1, 1))
+loca2_swe_future =subset(loca2_swe_future, time(loca2_swe_future) %in% time(vic_swe_r85))
+vic_swe_r85 =subset(vic_swe_r85, time(vic_swe_r85) %in% time(loca2_swe_future))
+
+loca2_swe_future = project(loca2_swe_future, vic_swe_r85[[1]] )
+
+diff_future = vic_swe_r85 - loca2_swe_future
+mean_diff_future = mean(diff_future, na.rm =TRUE)
 
 
 
-
-
+################################################################################
+## STEP 2: plot
+################################################################################
 
 ggplot() +
   geom_spatraster_contour_filled(
-    data = r_mean_diff,
+    data = mean_diff_hist,
     breaks = c(-1000, -250, -50, -25, 0, 25, 50, 250, 1000)
   ) +
   scale_fill_manual(
@@ -120,6 +101,7 @@ ggplot() +
   geom_spatvector(data = conus, fill = NA, color = "grey40") +
   xlab("Longitude") +
   ylab("Latitude") +
+  ggtitle('HIST MEAN DIFF: ACCESS10 VS LOCA2 SWE') +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(
@@ -130,22 +112,25 @@ ggplot() +
     axis.text = element_text(size = 30)
   )
 
+
+
 ggplot() +
   geom_spatraster_contour_filled(
-    data = r_sd_diff,
-    breaks = c(-600, -250, -50, -25, 0, 25, 50, 250, 600)
+    data = mean_diff_future,
+    breaks = c(-1000, -250, -50, -25, 0, 25, 50, 250, 1000)
   ) +
   scale_fill_manual(
-    name = "SD Change",
+    name = "Mean Change",
     values = c(
-       "#bf812d", "#dfc27d", "#f6e8c3",
-      "#c7eae5", "#80cdc1", "#35978f", "#01665e"
+      "#b35806", "#e08214", "#fdb863", "#fee0b6",
+      "#d8daeb", "#b2abd2", "#8073ac", "#542788"
     ), na.translate = F,
     guide = guide_legend(reverse = TRUE)
   ) +
   geom_spatvector(data = conus, fill = NA, color = "grey40") +
   xlab("Longitude") +
   ylab("Latitude") +
+  ggtitle('FUTURE MEAN DIFF: ACCESS10 VS LOCA2 SWE') +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(

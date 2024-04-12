@@ -27,20 +27,22 @@ r4 <- terra::rast("E:/data-raw/canada_model/raster/snw/r4/r4_raster.tif")
 r5 <- terra::rast("E:/data-raw/canada_model/raster/snw/r5/r5_raster.tif")
 
 raster <- mean(r1, r2, r3, r4, r5)
- 
-r1_hist =  subset(r1, time(r1) <= 2005)
-r2_hist =  subset(r2, time(r2) <= 2005)
-r3_hist =  subset(r3, time(r3) <= 2005)
-r4_hist =  subset(r4, time(r4) <= 2005)
-r5_hist =  subset(r5, time(r5) <= 2005)
+
+r1_hist =  subset(r1, time(r1) <= 2000)
+r2_hist =  subset(r2, time(r2) <= 2000)
+r3_hist =  subset(r3, time(r3) <= 2000)
+r4_hist =  subset(r4, time(r4) <= 2000)
+r5_hist =  subset(r5, time(r5) <= 2000)
 hist = mean(r1_hist, r2_hist, r3_hist,r4_hist,r5_hist)
 
-r1_future =  subset(r1, time(r1) > 2005)
-r2_future =  subset(r2, time(r2) >  2005)
-r3_future =  subset(r3, time(r3) >  2005)
-r4_future =  subset(r4, time(r4) > 2005)
-r5_future =  subset(r5, time(r5) >  2005)
+r1_future =  subset(r1, time(r1) > 2000)
+r2_future =  subset(r2, time(r2) >  2000)
+r3_future =  subset(r3, time(r3) >  2000)
+r4_future =  subset(r4, time(r4) > 2000)
+r5_future =  subset(r5, time(r5) >  2000)
 future = mean(r1_future, r2_future, r3_future,r4_future,r5_future)
+
+
 
 # ==============================================================================
 # get USA map with state boundaries
@@ -65,16 +67,16 @@ future_sd <- stdev(future, na.rm = TRUE)
 mean_diff <- future_mean - hist_mean
 sd_diff <- future_sd - hist_sd
 
-sf::gdal_utils(util = "warp", 
-               source = "D:/data-raw/canada_model/snw/NAM-44_CCCma-CanESM2_historical-r1/r1i1p1/snw_NAM-44_CCCma-CanESM2_historical-r1_r1i1p1_CCCma-CanRCM4_r2_mon_195001-195012.nc", 
-               destination = "D:/data-raw/canada_model/test.nc", 
-               options = c("-t_srs", "EPSG:4326"))
+plot(mean_diff, breaks = c(-1000, -250, -50, -25, 0, 25, 50))
+plot(conus, add = TRUE)
 
-test= rast("D:/data-raw/canada_model/test.nc")
-#=============================================================================#
+
+plot(sd_diff, breaks = c(-600, -250, -50, -25, 0, 25, 50, 250, 600))
+plot(conus, add = TRUE)
+# =============================================================================#
 # plot
-#=============================================================================#
-conus1 = shift(conus, dx=95.5, dy=-36.5)
+# =============================================================================#
+# conus = project(conus,mean_diff )
 
 ggplot() +
   geom_spatraster_contour_filled(
@@ -89,12 +91,12 @@ ggplot() +
     ), na.translate = F,
     guide = guide_legend(reverse = TRUE)
   ) +
- # geom_spatvector(data = conus1, fill = NA, color = "grey40") +
+  geom_spatvector(data = conus, fill = NA, color = "grey40") +
+  coord_sf(crs = 4326) +
   xlab("Longitude") +
   ylab("Latitude") +
-  ggtitle('CCSM4: RCP45 MEAN CHANGE') +
+  ggtitle("CCSM4: MEAN CHANGE") +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
-  coord_sf(crs = 4326) +
   theme(
     legend.position = c(0.9, 0.23),
     legend.title = element_text(size = 30),
@@ -111,16 +113,17 @@ ggplot() +
   scale_fill_manual(
     name = "SD Change",
     values = c(
-     # "#bf812d",
-      "#dfc27d", "#f6e8c3",
+      # "#bf812d",
+      # "#dfc27d",
+      "#f6e8c3",
       "#c7eae5", "#80cdc1", "#35978f", "#01665e"
     ), na.translate = F,
     guide = guide_legend(reverse = TRUE)
   ) +
- # geom_spatvector(data = conus, fill = NA, color = "grey40") +
+  geom_spatvector(data = conus, fill = NA, color = "grey40") +
   xlab("Longitude") +
   ylab("Latitude") +
-  ggtitle('CCSM4: RCP45 SD CHANGE') +
+  ggtitle("CCSM4:  SD CHANGE") +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(
@@ -130,4 +133,3 @@ ggplot() +
     axis.title = element_text(size = 30),
     axis.text = element_text(size = 30)
   )
-

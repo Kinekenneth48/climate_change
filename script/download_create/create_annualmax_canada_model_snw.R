@@ -66,12 +66,12 @@ terra::writeRaster(r1_raster,
 # ============================================================================#
 #  R2
 # ============================================================================#
-parent_directory_r2 <- "D:/data-raw/canada_model/snw/NAM-44_CCCma-CanESM2_historical-r2"
+parent_directory_r2 <- "D:/data-raw/canada_model/snw/warp_mask/NAM-44_CCCma-CanESM2_historical-r2"
 subdirs_r2 <- list.dirs(parent_directory_r2, full.names = TRUE, recursive = FALSE)
 r2_raster <- list()
 
 for (dir in subdirs_r2) {
-  r2_raster[length(r2_raster) + 1] <- process_directory_nc(dir)
+  r2_raster[length(r2_raster) + 1] <- process_directory_tif(dir)
 }
 
 s2 <- terra::sds(r2_raster)
@@ -84,12 +84,12 @@ terra::writeRaster(r2_raster,
 # ============================================================================#
 #  R3
 # ============================================================================#
-parent_directory_r3 <- "D:/data-raw/canada_model/snw/NAM-44_CCCma-CanESM2_historical-r3"
+parent_directory_r3 <- "D:/data-raw/canada_model/snw/warp_mask/NAM-44_CCCma-CanESM2_historical-r3"
 subdirs_r3 <- list.dirs(parent_directory_r3, full.names = TRUE, recursive = FALSE)
 r3_raster <- list()
 
 for (dir in subdirs_r3) {
-  r3_raster[length(r3_raster) + 1] <- process_directory_nc(dir)
+  r3_raster[length(r3_raster) + 1] <- process_directory_tif(dir)
 }
 
 s3 <- terra::sds(r3_raster)
@@ -103,12 +103,12 @@ terra::writeRaster(r3_raster,
 # ============================================================================#
 #  R4
 # ============================================================================#
-parent_directory_r4 <- "D:/data-raw/canada_model/snw/NAM-44_CCCma-CanESM2_historical-r4"
+parent_directory_r4 <- "D:/data-raw/canada_model/snw/warp_mask/NAM-44_CCCma-CanESM2_historical-r4"
 subdirs_r4 <- list.dirs(parent_directory_r4, full.names = TRUE, recursive = FALSE)
 r4_raster <- list()
 
 for (dir in subdirs_r4) {
-  r4_raster[length(r4_raster) + 1] <- process_directory_nc(dir)
+  r4_raster[length(r4_raster) + 1] <- process_directory_tif(dir)
 }
 
 s4 <- terra::sds(r4_raster)
@@ -123,12 +123,12 @@ terra::writeRaster(r4_raster,
 # ============================================================================#
 #  R5
 # ============================================================================#
-parent_directory_r5 <- "D:/data-raw/canada_model/snw/NAM-44_CCCma-CanESM2_historical-r5"
+parent_directory_r5 <- "D:/data-raw/canada_model/snw/warp_mask/NAM-44_CCCma-CanESM2_historical-r5"
 subdirs_r5 <- list.dirs(parent_directory_r5, full.names = TRUE, recursive = FALSE)
 r5_raster <- list()
 
 for (dir in subdirs_r5) {
-  r5_raster[length(r5_raster) + 1] <- process_directory_nc(dir)
+  r5_raster[length(r5_raster) + 1] <- process_directory_tif(dir)
 }
 
 s5 <- terra::sds(r5_raster)

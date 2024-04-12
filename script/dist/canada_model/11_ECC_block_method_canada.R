@@ -12,7 +12,7 @@ pacman::p_load(
 
 
 source("R/mk.R")
-source("R/gev_fit_stat_nonstat.R")
+source("R/fit_gev_event.R")
 
 # manage memory usage so PC doesn't crash
 terraOptions(memfrac = 0.80, verbose = TRUE)
@@ -30,19 +30,21 @@ r5 <- terra::rast("E:/data-raw/canada_model/raster/snw/r5/r5_raster.tif")
 
 raster <- mean(r1, r2, r3, r4, r5)
 
-r1_hist =  subset(r1, time(r1) <= 2005)
-r2_hist =  subset(r2, time(r2) <= 2005)
-r3_hist =  subset(r3, time(r3) <= 2005)
-r4_hist =  subset(r4, time(r4) <= 2005)
-r5_hist =  subset(r5, time(r5) <= 2005)
-hist = mean(r1_hist, r2_hist, r3_hist,r4_hist,r5_hist)
+# 1986 to 2016
+r1_hist <- subset(r1, time(r1) >= 1981 &  time(r1) <= 2011)
+r2_hist <- subset(r2,  time(r2) >= 1981 &  time(r2) <= 2011)
+r3_hist <- subset(r3,time(r3) >= 1981 &  time(r3) <= 2011)
+r4_hist <- subset(r4, time(r4) >= 1981 &  time(r4) <= 2011)
+r5_hist <- subset(r5, time(r5) >= 1981 &  time(r5) <= 2011)
+hist <- mean(r1_hist, r2_hist, r3_hist, r4_hist, r5_hist)
 
-r1_future =  subset(r1, time(r1) > 2005)
-r2_future =  subset(r2, time(r2) >  2005)
-r3_future =  subset(r3, time(r3) >  2005)
-r4_future =  subset(r4, time(r4) > 2005)
-r5_future =  subset(r5, time(r5) >  2005)
-future = mean(r1_future, r2_future, r3_future,r4_future,r5_future)
+# 2025 to 2075
+r1_future <- subset(r1, time(r1) >= 2020 & time(r1) <= 2070)
+r2_future <- subset(r2, time(r2) >= 2020 & time(r2) <= 2070)
+r3_future <- subset(r3, time(r3) >= 2020 & time(r3) <= 2070)
+r4_future <- subset(r4, time(r4) >= 2020 & time(r4) <= 2070)
+r5_future <- subset(r5, time(r5) >= 2020 & time(r5) <= 2070)
+future <- mean(r1_future, r2_future, r3_future, r4_future, r5_future)
 
 
 # ==============================================================================
@@ -96,13 +98,13 @@ ggplot() +
     ), na.translate = F,
     guide = guide_legend(reverse = TRUE)
   ) +
-  #geom_spatvector(data = conus, fill = NA, color = "grey40") +
+  geom_spatvector(data = conus, fill = NA, color = "grey40") +
   xlab("Longitude") +
   ylab("Latitude") +
   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
   coord_sf(crs = 4326) +
   theme(
-    legend.position = c(0.85, 0.23),
+    #legend.position = c(0.95, 0.23),
     legend.title = element_text(size = 30),
     legend.text = element_text(size = 30),
     axis.title = element_text(size = 30),
@@ -121,60 +123,62 @@ ggplot() +
 
 
 # fit dist and estimate MRI (mean is varying for future scenarios)
-ECC_hist_mixstat_canada <- terra::app(hist,
-  fun = gev_fit_stat_nonstat, cores = 12
+ECC_hist_block_canada <- terra::app(hist,
+  fun = fit_gev_event, cores = 12
 )
 
 
-ECC_future_mixstat_canada <- terra::app(future,
-                   fun = gev_fit_stat_nonstat, cores = 12
+ECC_future_block_canada <- terra::app(future,
+                   fun = fit_gev_event, cores = 12
 )
 
 
 
-writeRaster(ECC_hist_mixstat_canada,
-            "E:data-raw/dist_fit_vic/canada/ECC_hist_mixstat_canada.tif",
+writeRaster(ECC_hist_block_canada,
+            "E:data-raw/canada_model/ECC_hist_block_canada.tif",
             overwrite = TRUE
 )
 
-writeRaster(ECC_future_mixstat_canada,
-  "E:data-raw/dist_fit_vic/canada/ECC_future_mixstat_canada.tif",
+writeRaster(ECC_future_block_canada,
+  "E:data-raw/canada_model/ECC_future_block_canada.tif",
   overwrite = TRUE
 )
 
 
 
 
-ECC_hist_mixstat_canada <-
-  rast("E:data-raw/dist_fit_vic/canada/ECC_hist_mixstat_canada.tif")
+ECC_hist_block_canada <-
+  rast("E:data-raw/canada_model/ECC_hist_block_canada.tif")
 
-ECC_future_mixstat_canada <-
-  rast("E:data-raw/dist_fit_vic/canada/ECC_future_mixstat_canada.tif")
+ECC_future_block_canada <-
+  rast("E:data-raw/canada_model/ECC_future_block_canada.tif")
 
 
-mean_ecc_hist_mixstat_canada <- mean(ECC_hist_mixstat_canada, na.rm = TRUE)
-mean_ecc_future_mixstat_canada <- mean(ECC_future_mixstat_canada, na.rm = TRUE)
+mean_ecc_hist_block_canada <- mean(ECC_hist_block_canada, na.rm = TRUE)
+mean_ecc_future_block_canada <- mean(ECC_future_block_canada, na.rm = TRUE)
 
 
 #prism_mask_vic <- rast("data-raw/mask/prism_mask_vic.tif")
 
-diff_event_future_mixstat_ccsm4 <- (mean_ecc_future_mixstat_canada - mean_ecc_hist_mixstat_canada) /
-  mean_ecc_hist_mixstat_canada
+diff_event_future_block_canada <- (mean_ecc_future_block_canada - mean_ecc_hist_block_canada) /
+  mean_ecc_hist_block_canada
 
-
-#diff_event_future_mixstat_ccsm4 <- terra::mask(diff_event_future_mixstat_ccsm4, prism_mask_vic)
 
 
 ggplot() +
   geom_spatraster_contour_filled(
-    data = diff_event_r45_mixstat_ccsm4,
+    data = diff_event_future_block_canada,
     breaks = c(-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1)
   ) +
   scale_fill_manual(
     name = "MRI Percent \n Change",
     values = c(
-      "#543005", "#8c510a", "#bf812d", "#dfc27d", "#f6e8c3",
-      "#c7eae5", "#80cdc1", "#35978f", "#01665e", "#003c30"
+    #  "#543005", 
+      "#8c510a", "#bf812d", "#dfc27d",
+      "#f6e8c3",
+      "#c7eae5"
+       
+      # , "#80cdc1","#35978f", "#01665e", "#003c30"
     ), na.translate = F,
     guide = guide_legend(reverse = TRUE)
   ) +
@@ -190,31 +194,3 @@ ggplot() +
     axis.title = element_text(size = 30),
     axis.text = element_text(size = 30)
   )
-
-ggplot() +
-  geom_spatraster_contour_filled(
-    data = diff_event_r85_mixstat_ccsm4,
-    breaks = c(-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1)
-  ) +
-  scale_fill_manual(
-    name = "MRI Percent \n Change",
-    values = c(
-      "#543005", "#8c510a", "#bf812d", "#dfc27d", "#f6e8c3",
-      "#c7eae5", "#80cdc1", "#35978f", "#01665e", "#003c30"
-    ), na.translate = F,
-    guide = guide_legend(reverse = TRUE)
-  ) +
-  geom_spatvector(data = conus, fill = NA, color = "grey40") +
-  xlab("Longitude") +
-  ylab("Latitude") +
-  ggtitle("ccsm4 R45 FULL") +
-  theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
-  coord_sf(crs = 4326) +
-  theme(
-    legend.position = c(0.91, 0.28),
-    legend.title = element_text(size = 30),
-    legend.text = element_text(size = 30),
-    axis.title = element_text(size = 30),
-    axis.text = element_text(size = 30)
-  )
-
